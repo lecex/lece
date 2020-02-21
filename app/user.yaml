@@ -68,12 +68,20 @@ spec:
                 secretKeyRef:
                   key: mariadb-password
                   name: user-mariadb
+            - name: MICRO_BROKER
+              value: "nats"
+            - name: MICRO_BROKER_ADDRESS
+              value: "nats-cluster"
+            - name: MICRO_REGISTRY
+              value: "etcd"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "etcd-cluster-client"
           ports:
           - containerPort: 8080
             name: micro
             protocol: TCP
         - name: health
-          image: microhq/health
+          image: microhq/health:kubernetes
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
