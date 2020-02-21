@@ -1,0 +1,51 @@
+stages:
+# 依赖 redis 部署
+- name: Redis
+  steps:
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:library-redis
+      version: 3.0.2
+      answers:
+        master.persistence.enabled: "true"
+        cluster.slaveCount: "2"
+      name: redis
+      targetNamespace: api
+# 配置部署
+- name: Config
+  steps:
+  - applyYamlConfig:
+      path: ./config.yaml
+# RBAC
+# - name: RBAC
+#   steps:
+#   - applyYamlConfig:
+#       path: ./RBAC.yaml
+# rpc 接口部署
+- name: Micro
+  steps:
+  - applyYamlConfig:
+      path: ./app/micro-api.yaml
+# user 用户数据库
+- name: UserMariadb
+  steps:
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:library-mariadb
+      version: 6.7.4
+      answers:
+        db.name: user
+        db.user: user
+        service.type: ClusterIP
+        slave.replicas: "2"
+      name: user
+      targetNamespace: srv
+# user 用户服务
+- name: User
+  steps:
+  - applyYamlConfig:
+      path: ./app/user.yaml
+# user-api 用户 API 服务
+- name: UserApi
+  steps:
+  - applyYamlConfig:
+      path: ./app/user-api.yaml
+
