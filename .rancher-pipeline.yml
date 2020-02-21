@@ -1,42 +1,32 @@
 stages:
-# 依赖 redis 部署
 - name: Etcd
   steps:
   - applyAppConfig:
-      catalogTemplate: cattle-global-data:library-etcd-operator
-      version: 0.9.0
+      catalogTemplate: cattle-global-data:googleapis-etcd-operator
+      version: 0.9.1
       answers:
         customResources.createEtcdClusterCRD: "true"
       name: etcd-operator
       targetNamespace: srv
-# 依赖 redis 部署
 - name: Redis
   steps:
   - applyAppConfig:
       catalogTemplate: cattle-global-data:library-redis
       version: 9.0.2
       answers:
+        cluster.slaveCount: "2"
         master.persistence.enabled: "true"
         slave.persistence.enabled: "true"
-        cluster.slaveCount: "2"
       name: redis
       targetNamespace: srv
-# 配置部署
 - name: Config
   steps:
   - applyYamlConfig:
       path: ./config.yaml
-# RBAC
-# - name: RBAC
-#   steps:
-#   - applyYamlConfig:
-#       path: ./RBAC.yaml
-# rpc 接口部署
 - name: Micro
   steps:
   - applyYamlConfig:
       path: ./app/micro-api.yaml
-# user 用户数据库
 - name: UserMariadb
   steps:
   - applyAppConfig:
@@ -49,14 +39,12 @@ stages:
         slave.replicas: "2"
       name: user
       targetNamespace: srv
-# user 用户服务
 - name: User
   steps:
   - applyYamlConfig:
       path: ./app/user.yaml
-# user-api 用户 API 服务
 - name: UserApi
   steps:
   - applyYamlConfig:
       path: ./app/user-api.yaml
-
+notification: {}
