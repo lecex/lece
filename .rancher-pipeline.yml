@@ -8,7 +8,7 @@ stages:
       answers:
         customResources.createEtcdClusterCRD: "true"
       name: etcd-operator
-      targetNamespace: system
+      targetNamespace: srv
 # 依赖 redis 部署
 - name: Redis
   steps:
@@ -20,7 +20,7 @@ stages:
         slave.persistence.enabled: "true"
         cluster.slaveCount: "2"
       name: redis
-      targetNamespace: system
+      targetNamespace: srv
 # 配置部署
 - name: Config
   steps:
