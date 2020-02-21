@@ -7,6 +7,7 @@ stages:
       version: 9.0.2
       answers:
         master.persistence.enabled: "true"
+        slave.persistence.enabled: "true"
         cluster.slaveCount: "2"
       name: redis
       targetNamespace: api
