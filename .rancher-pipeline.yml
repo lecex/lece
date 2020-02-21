@@ -4,7 +4,7 @@ stages:
   steps:
   - applyAppConfig:
       catalogTemplate: cattle-global-data:library-redis
-      version: 3.0.2
+      version: 9.0.2
       answers:
         master.persistence.enabled: "true"
         cluster.slaveCount: "2"
