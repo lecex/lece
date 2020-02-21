@@ -3,7 +3,7 @@ stages:
 - name: Etcd
   steps:
   - applyAppConfig:
-      catalogTemplate: library-etcd-operator
+      catalogTemplate: cattle-global-data:library-etcd-operator
       version: 0.9.0
       answers:
         customResources.createEtcdClusterCRD: "true"
