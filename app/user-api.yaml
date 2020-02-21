@@ -46,7 +46,7 @@ spec:
             - name: USER_NAME
               value: "user.srv"
             - name: REDIS_HOST
-              value: "redis-master"
+              value: "redis-master.system"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -55,11 +55,11 @@ spec:
             - name: MICRO_BROKER
               value: "nats"
             - name: MICRO_BROKER_ADDRESS
-              value: "nats-cluster"
+              value: "nats-cluster.system"
             - name: MICRO_REGISTRY
               value: "etcd"
             - name: MICRO_REGISTRY_ADDRESS
-              value: "etcd-cluster-client"
+              value: "etcd-cluster-client.system"
           ports:
           - containerPort: 8080
             name: micro

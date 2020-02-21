@@ -1,5 +1,15 @@
 stages:
 # 依赖 redis 部署
+- name: Etcd
+  steps:
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:library-etcd-operator
+      version: 9.0.2
+      answers:
+        customResources.createEtcdClusterCRD: "true"
+      name: etcd-operator
+      targetNamespace: system
+# 依赖 redis 部署
 - name: Redis
   steps:
   - applyAppConfig:
@@ -10,7 +20,7 @@ stages:
         slave.persistence.enabled: "true"
         cluster.slaveCount: "2"
       name: redis
-      targetNamespace: api
+      targetNamespace: system
 # 配置部署
 - name: Config
   steps:
