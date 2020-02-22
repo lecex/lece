@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: user
-  namespace: srv
-data:
-  admin-password: YWRtaW4xMjM=
-  app-key: NjFhMTBiNjVjMWY5Mjg5MTYxMzhhYzMzOTMxZGI2NTc=
----
