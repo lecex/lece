@@ -9,7 +9,7 @@ stages:
         master.persistence.enabled: "true"
         slave.persistence.enabled: "true"
       name: redis
-      targetNamespace: srv
+      targetNamespace: api
 - name: Config
   steps:
   - applyYamlConfig:
