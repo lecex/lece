@@ -73,9 +73,7 @@ spec:
             - name: MICRO_BROKER_ADDRESS
               value: "nats-cluster.srv"
             - name: MICRO_REGISTRY
-              value: "etcd"
-            - name: MICRO_REGISTRY_ADDRESS
-              value: "etcd-cluster-client.srv"
+              value: "kubernetes"
           ports:
           - containerPort: 8080
             name: micro
