@@ -44,7 +44,7 @@ spec:
           ]
           env:
             - name: USER_NAME
-              value: "user.srv"
+              value: "user.srv:8080"
             - name: REDIS_HOST
               value: "redis-master.api"
             - name: REDIS_PASSWORD
