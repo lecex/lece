@@ -12,7 +12,7 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      name: micro
+      name: http
       targetPort: 8080
 ---
 apiVersion: apps/v1
@@ -68,15 +68,9 @@ spec:
                 secretKeyRef:
                   key: mariadb-password
                   name: user-mariadb
-            - name: MICRO_BROKER
-              value: "nats"
-            - name: MICRO_BROKER_ADDRESS
-              value: "nats-cluster.srv"
-            - name: MICRO_REGISTRY
-              value: "kubernetes"
           ports:
           - containerPort: 8080
-            name: micro
+            name: http
             protocol: TCP
         - name: health
           image: microhq/health:kubernetes
