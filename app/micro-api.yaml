@@ -48,17 +48,19 @@ spec:
       serviceAccountName: micro-services
       containers:
         - name: micro
-          image: microhq/micro:kubernetes
+          image: micro/micro
           imagePullPolicy: Always
           args:
             - "api"
-            - "--handler=rpc"
+            - "--enable_rpc=true"
             - "--address=0.0.0.0:8080"
           env:
           - name: MICRO_SERVER_NAME
             value: micro
           - name: MICRO_SERVER_ADDRESS
             value: 0.0.0.0:8989
+          - name: MICRO_REGISTRY
+            value: "kubernetes"
           ports:
           - containerPort: 8080
             name: http

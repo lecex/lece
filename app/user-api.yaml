@@ -52,6 +52,8 @@ spec:
                 secretKeyRef:
                   key: redis-password
                   name: redis
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
           ports:
           - containerPort: 8080
             name: http
