@@ -38,4 +38,24 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./app/user-api.yaml
+- name: PayMariadb
+  steps:
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:library-mariadb
+      version: 6.7.4
+      answers:
+        db.name: pay
+        db.user: pay
+        service.type: ClusterIP
+        slave.replicas: "2"
+      name: pay
+      targetNamespace: srv
+- name: Pay
+  steps:
+  - applyYamlConfig:
+      path: ./app/pay.yaml
+- name: PayApi
+  steps:
+  - applyYamlConfig:
+      path: ./app/pay-api.yaml
 notification: {}

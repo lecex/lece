@@ -1,0 +1,69 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pay-api
+  namespace: api
+spec:
+  selector:
+    app: pay-api
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pay-api
+  namespace: api
+  labels:
+    app: pay-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pay-api
+  template:
+    metadata:
+      labels:
+        app: pay-api
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: pay-api
+          image: lecex/pay-api
+          imagePullPolicy: Always
+          command: [
+            "service",
+            "--selector=static",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: USER_NAME
+              value: "user.srv:8080"
+            - name: PAY_NAME
+              value: "pay.srv:8080"
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=pay-api",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

@@ -1,0 +1,88 @@
+
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pay
+  namespace: srv
+spec:
+  selector:
+    app: pay
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pay
+  namespace: srv
+  labels:
+    app: pay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pay
+  template:
+    metadata:
+      labels:
+        app: pay
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: pay
+          image: lecex/pay
+          imagePullPolicy: Always
+          command: [
+            "service",
+            "--selector=static",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: pay
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: app-key
+                  name: pay
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: DB_HOST
+              value: "pay-mariadb"
+            - name: DB_PAY
+              value: "pay"
+            - name: DB_NAME
+              value: "pay"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-password
+                  name: pay-mariadb
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=pay",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
