@@ -37,7 +37,7 @@ spec:
       - name: pipeline-docker-registry
       containers:
         - name: pay
-          image: lecex/pay
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
           imagePullPolicy: Always
           command: [
             "service",
