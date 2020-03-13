@@ -47,8 +47,6 @@ spec:
               value: "user.srv:8080"
             - name: PAY_NAME
               value: "pay.srv:8080"
-            - name: MICRO_REGISTRY
-              value: "kubernetes"
           ports:
           - containerPort: 8080
             name: http
