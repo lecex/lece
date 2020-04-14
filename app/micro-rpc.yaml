@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: micro-api
+  name: micro-rpc
   namespace: api
 spec:
   rules:
@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: Always
           args:
             - "api"
-            - "--handler=rpc"
+            - "--handler=api"
           env:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api

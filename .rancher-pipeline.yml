@@ -14,7 +14,11 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./config.yaml
-- name: Micro
+- name: MicroRpc
+  steps:
+  - applyYamlConfig:
+      path: ./app/micro-rpc.yaml
+- name: MicroApi
   steps:
   - applyYamlConfig:
       path: ./app/micro-api.yaml

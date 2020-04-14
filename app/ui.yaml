@@ -1,5 +1,17 @@
-
-
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ui
+  namespace: api
+spec:
+  rules:
+  - host: xip.io
+    http:
+      paths:
+        - backend:
+            serviceName: ui
+            servicePort: http
+---
 kind: Service
 apiVersion: v1
 metadata:
@@ -39,12 +51,6 @@ spec:
         - name: ui
           image: registry.cn-hangzhou.aliyuncs.com/lecex/electron
           imagePullPolicy: Always
-          env:
-            - name: BASE_URL
-              valueFrom:
-                secretKeyRef:
-                  key: base-url
-                  name: ui
           ports:
           - containerPort: 80
             name: http
