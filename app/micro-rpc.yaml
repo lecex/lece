@@ -10,17 +10,17 @@ spec:
     http:
       paths:
         - backend:
-            serviceName: micro
+            serviceName: micro-rpc
             servicePort: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: micro
+  name: micro-rpc
   namespace: api
 spec:
   selector:
-    app: micro
+    app: micro-rpc
   type: ClusterIP
   ports:
     - name: http
@@ -31,23 +31,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: micro
+  name: micro-rpc
   namespace: api
   labels:
-    app: micro
+    app: micro-rpc
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: micro
+      app: micro-rpc
   template:
     metadata:
       labels:
-        app: micro
+        app: micro-rpc
     spec:
-      serviceAccountName: micro-services
+      serviceAccountName: micro-rpc-services
       containers:
-        - name: micro
+        - name: micro-rpc
           image: micro/micro:v2.0.0
           imagePullPolicy: Always
           args:
@@ -57,7 +57,7 @@ spec:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api
           - name: MICRO_SERVER_NAME
-            value: micro
+            value: micro-rpc
           - name: MICRO_SERVER_ADDRESS
             value: 0.0.0.0:8989
           - name: MICRO_ENABLE_STATS
@@ -72,7 +72,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=micro",
+            "--server_name=micro-rpc",
             "--server_address=0.0.0.0:8989"
           ]
           image: microhq/health:kubernetes
