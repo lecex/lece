@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: micro-api
+  name: microapi
   namespace: api
 spec:
   rules:
@@ -10,17 +10,17 @@ spec:
     http:
       paths:
         - backend:
-            serviceName: micro-api
+            serviceName: microapi
             servicePort: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: micro-api
+  name: microapi
   namespace: api
 spec:
   selector:
-    app: micro-api
+    app: microapi
   type: ClusterIP
   ports:
     - name: http
@@ -31,23 +31,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: micro-api
+  name: microapi
   namespace: api
   labels:
-    app: micro-api
+    app: microapi
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: micro-api
+      app: microapi
   template:
     metadata:
       labels:
-        app: micro-api
+        app: microapi
     spec:
-      serviceAccountName: micro-api-services
+      serviceAccountName: microapi-services
       containers:
-        - name: micro-api
+        - name: microapi
           image: micro/micro:v2.0.0
           imagePullPolicy: Always
           args:
@@ -57,7 +57,7 @@ spec:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api
           - name: MICRO_SERVER_NAME
-            value: micro-api
+            value: microapi
           - name: MICRO_SERVER_ADDRESS
             value: 0.0.0.0:8989
           - name: MICRO_ENABLE_STATS
@@ -72,7 +72,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=micro-api",
+            "--server_name=microapi",
             "--server_address=0.0.0.0:8989"
           ]
           image: microhq/health:kubernetes
