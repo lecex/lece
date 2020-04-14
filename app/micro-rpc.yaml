@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: microrpc
+  name: micro-rpc
   namespace: api
 spec:
   rules:
@@ -10,17 +10,17 @@ spec:
     http:
       paths:
         - backend:
-            serviceName: microrpc
+            serviceName: micro-rpc
             servicePort: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: microrpc
+  name: micro-rpc
   namespace: api
 spec:
   selector:
-    app: microrpc
+    app: micro-rpc
   type: ClusterIP
   ports:
     - name: http
@@ -31,23 +31,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microrpc
+  name: micro-rpc
   namespace: api
   labels:
-    app: microrpc
+    app: micro-rpc
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: microrpc
+      app: micro-rpc
   template:
     metadata:
       labels:
-        app: microrpc
+        app: micro-rpc
     spec:
       serviceAccountName: micro-services
       containers:
-        - name: microrpc
+        - name: micro-rpc
           image: micro/micro:v2.0.0
           imagePullPolicy: Always
           args:
@@ -57,7 +57,7 @@ spec:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api
           - name: MICRO_SERVER_NAME
-            value: microrpc
+            value: micro-rpc
           - name: MICRO_SERVER_ADDRESS
             value: 0.0.0.0:8989
           - name: MICRO_ENABLE_STATS
@@ -72,7 +72,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=microrpc",
+            "--server_name=micro-rpc",
             "--server_address=0.0.0.0:8989"
           ]
           image: microhq/health:kubernetes
