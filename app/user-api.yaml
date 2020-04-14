@@ -43,7 +43,9 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: USER_NAME
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
+            - name: USER_SERVICE
               value: "user.srv:8080"
             - name: REDIS_HOST
               value: "redis-master.api"

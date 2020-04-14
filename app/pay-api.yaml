@@ -43,9 +43,11 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: USER_NAME
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
+            - name: USER_SERVICE
               value: "user.srv:8080"
-            - name: PAY_NAME
+            - name: PAY_SERVICE
               value: "pay.srv:8080"
           ports:
           - containerPort: 8080
