@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: Always
           args:
             - "api"
-            - "--handler=api"
+            - "--handler=rpc"
           env:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api
