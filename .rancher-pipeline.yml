@@ -10,6 +10,10 @@ stages:
         slave.persistence.enabled: "true"
       name: redis
       targetNamespace: api
+- name: Ui
+  steps:
+  - applyYamlConfig:
+      path: ./ui.yaml
 - name: Config
   steps:
   - applyYamlConfig:

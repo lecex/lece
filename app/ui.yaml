@@ -1,3 +1,18 @@
+# 负载均衡
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: micro-rpc
+  namespace: api
+spec:
+  rules:
+  - host: xip.io
+    http:
+      paths:
+        - backend:
+            serviceName: ui
+            servicePort: http
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:

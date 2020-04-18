@@ -48,16 +48,25 @@ spec:
             - name: TOKEN_VALIDITY_PERIOD
               value: "15"
             - name: DB_HOST
-              value: "pay-mariadb"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-host
+                    name: lecex-pay
             - name: DB_USER
-              value: "pay"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-user
+                    name: lecex-pay
             - name: DB_NAME
-              value: "pay"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-name
+                    name: lecex-pay
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: mariadb-password
-                  name: pay-mariadb
+                  key: mysql-pay-password
+                  name: lecex
           ports:
           - containerPort: 8080
             name: http

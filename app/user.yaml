@@ -49,25 +49,34 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: admin-password
-                  name: user
+                  name: lecex
             - name: APP_KEY
               valueFrom:
                 secretKeyRef:
                   key: app-key
-                  name: user
+                  name: lecex
             - name: TOKEN_VALIDITY_PERIOD
               value: "15"
             - name: DB_HOST
-              value: "user-mariadb"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-host
+                    name: lecex-user
             - name: DB_USER
-              value: "user"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-user
+                    name: lecex-user
             - name: DB_NAME
-              value: "user"
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-name
+                    name: lecex-user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: mariadb-password
-                  name: user-mariadb
+                  key: mysql-user-password
+                  name: lecex
           ports:
           - containerPort: 8080
             name: http
