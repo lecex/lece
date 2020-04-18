@@ -48,11 +48,12 @@ spec:
       serviceAccountName: micro-services
       containers:
         - name: micro-api
-          image: micro/micro:v2.0.0
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/micro:v2.4.0
           imagePullPolicy: Always
           args:
             - "api"
             - "--handler=api"
+            - "--enable_cors=true"
           env:
           - name: MICRO_API_NAMESPACE
             value: go.micro.api
