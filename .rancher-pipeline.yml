@@ -13,7 +13,7 @@ stages:
 - name: Ui
   steps:
   - applyYamlConfig:
-      path: ./ui.yaml
+      path: ./app/ui.yaml
 - name: Config
   steps:
   - applyYamlConfig:
