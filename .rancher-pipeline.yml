@@ -26,18 +26,18 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./app/micro-api.yaml
-- name: UserMariadb
-  steps:
-  - applyAppConfig:
-      catalogTemplate: cattle-global-data:library-mariadb
-      version: 6.7.4
-      answers:
-        db.name: user
-        db.user: user
-        service.type: ClusterIP
-        slave.replicas: "2"
-      name: user
-      targetNamespace: srv
+# - name: UserMariadb
+#   steps:
+#   - applyAppConfig:
+#       catalogTemplate: cattle-global-data:library-mariadb
+#       version: 6.7.4
+#       answers:
+#         db.name: user
+#         db.user: user
+#         service.type: ClusterIP
+#         slave.replicas: "2"
+#       name: user
+#       targetNamespace: srv
 - name: User
   steps:
   - applyYamlConfig:
@@ -46,18 +46,18 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./app/user-api.yaml
-- name: PayMariadb
-  steps:
-  - applyAppConfig:
-      catalogTemplate: cattle-global-data:library-mariadb
-      version: 6.7.4
-      answers:
-        db.name: pay
-        db.user: pay
-        service.type: ClusterIP
-        slave.replicas: "2"
-      name: pay
-      targetNamespace: srv
+# - name: PayMariadb
+#   steps:
+#   - applyAppConfig:
+#       catalogTemplate: cattle-global-data:library-mariadb
+#       version: 6.7.4
+#       answers:
+#         db.name: pay
+#         db.user: pay
+#         service.type: ClusterIP
+#         slave.replicas: "2"
+#       name: pay
+#       targetNamespace: srv
 - name: Pay
   steps:
   - applyYamlConfig:
