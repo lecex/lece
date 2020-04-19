@@ -8,7 +8,7 @@ stages:
         cluster.slaveCount: "2"
         master.persistence.enabled: "true"
         slave.persistence.enabled: "true"
-      name: redis_pos
+      name: redis
       targetNamespace: api
 - name: Ui
   steps:
