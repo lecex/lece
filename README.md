@@ -8,7 +8,7 @@ lece 以一款基础 rancher k8s 微服务集群的整套管理系统
 - rancher
 - kubernetes
 - golang
-- microhq/micro 
+- micro/micro 
 - git
 - docker
 - makefile

@@ -3,11 +3,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: user
+  name: pay
   namespace: srv
 spec:
   selector:
-    app: user
+    app: pay
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -18,64 +18,54 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user
+  name: pay
   namespace: srv
   labels:
-    app: user
+    app: pay
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user
+      app: pay
   template:
     metadata:
       labels:
-        app: user
+        app: pay
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: user
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/user
+        - name: pay
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
           imagePullPolicy: Always
           command: [
-            "service",
+            "pay",
             "--selector=static",
             "--server_address=:8080",
           ]
           env:
-            - name: ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: admin-password
-                  name: lecex
-            - name: APP_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: app-key
-                  name: lecex
             - name: TOKEN_VALIDITY_PERIOD
               value: "15"
             - name: DB_HOST
               valueFrom:
                   configMapKeyRef:
                     key: db-host
-                    name: lecex-user
+                    name: lecex-pay
             - name: DB_USER
               valueFrom:
                   configMapKeyRef:
                     key: db-user
-                    name: lecex-user
+                    name: lecex-pay
             - name: DB_NAME
               valueFrom:
                   configMapKeyRef:
                     key: db-name
-                    name: lecex-user
+                    name: lecex-pay
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: mysql-user-password
+                  key: mysql-pay-password
                   name: lecex
           ports:
           - containerPort: 8080
@@ -86,7 +76,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=user",
+            "--server_name=pay",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

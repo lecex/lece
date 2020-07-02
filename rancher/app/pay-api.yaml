@@ -1,13 +1,11 @@
-
-
 kind: Service
 apiVersion: v1
 metadata:
-  name: pay
-  namespace: srv
+  name: pay-api
+  namespace: api
 spec:
   selector:
-    app: pay
+    app: pay-api
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -18,55 +16,39 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pay
-  namespace: srv
+  name: pay-api
+  namespace: api
   labels:
-    app: pay
+    app: pay-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pay
+      app: pay-api
   template:
     metadata:
       labels:
-        app: pay
+        app: pay-api
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: pay
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
+        - name: pay-api
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay-api
           imagePullPolicy: Always
           command: [
-            "service",
+            "payApi",
             "--selector=static",
             "--server_address=:8080",
           ]
           env:
-            - name: TOKEN_VALIDITY_PERIOD
-              value: "15"
-            - name: DB_HOST
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-host
-                    name: lecex-pay
-            - name: DB_USER
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-user
-                    name: lecex-pay
-            - name: DB_NAME
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-name
-                    name: lecex-pay
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: mysql-pay-password
-                  name: lecex
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
+            - name: USER_SERVICE
+              value: "user.srv:8080"
+            - name: PAY_SERVICE
+              value: "pay.srv:8080"
           ports:
           - containerPort: 8080
             name: http
@@ -76,7 +58,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=pay",
+            "--server_name=pay-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

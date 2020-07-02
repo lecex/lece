@@ -1,0 +1,97 @@
+
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: user
+  namespace: srv
+spec:
+  selector:
+    app: user
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  namespace: srv
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: user
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/user
+          imagePullPolicy: Always
+          command: [
+            "user",
+            "--selector=static",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: lecex
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: app-key
+                  name: lecex
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: DB_HOST
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-host
+                    name: lecex-user
+            - name: DB_USER
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-user
+                    name: lecex-user
+            - name: DB_NAME
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-name
+                    name: lecex-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-user-password
+                  name: lecex
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=user",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
