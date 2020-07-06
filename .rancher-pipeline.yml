@@ -13,33 +13,33 @@ stages:
 - name: Ui
   steps:
   - applyYamlConfig:
-      path: ./app/ui.yaml
+      path: ./rancher/app/ui.yaml
 - name: Config
   steps:
   - applyYamlConfig:
-      path: ./config.yaml
+      path: ./rancher/config.yaml
 - name: MicroRpc
   steps:
   - applyYamlConfig:
-      path: ./app/micro-rpc.yaml
+      path: ./rancher/app/micro-rpc.yaml
 - name: MicroApi
   steps:
   - applyYamlConfig:
-      path: ./app/micro-api.yaml
+      path: ./rancher/app/micro-api.yaml
 - name: User
   steps:
   - applyYamlConfig:
-      path: ./app/user.yaml
+      path: ./rancher/app/user.yaml
 - name: UserApi
   steps:
   - applyYamlConfig:
-      path: ./app/user-api.yaml
+      path: ./rancher/app/user-api.yaml
 - name: Pay
   steps:
   - applyYamlConfig:
-      path: ./app/pay.yaml
+      path: ./rancher/app/pay.yaml
 - name: PayApi
   steps:
   - applyYamlConfig:
-      path: ./app/pay-api.yaml
+      path: ./rancher/app/pay-api.yaml
 notification: {}
