@@ -45,6 +45,7 @@ spec:
       labels:
         app: micro-api
     spec:
+      serviceAccountName: micro-services
       containers:
         - name: micro-api
           image: registry.cn-hangzhou.aliyuncs.com/lecex/micro:v2.4.0
@@ -62,6 +63,8 @@ spec:
             value: 0.0.0.0:8989
           - name: MICRO_ENABLE_STATS
             value: "true"
+          - name: MICRO_REGISTRY
+            value: kubernetes
           ports:
           - containerPort: 8080
             name: http

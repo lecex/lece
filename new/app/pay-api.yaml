@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: user-api
+  name: pay-api
   namespace: api
 spec:
   selector:
-    app: user-api
+    app: pay-api
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -16,28 +16,29 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-api
+  name: pay-api
   namespace: api
   labels:
-    app: user-api
+    app: pay-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-api
+      app: pay-api
   template:
     metadata:
       labels:
-        app: user-api
+        app: pay-api
     spec:
+      serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: user-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/user-api
+        - name: pay-api
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay-api
           imagePullPolicy: Always
           command: [
-            "userApi",
+            "payApi",
             "--selector=static",
             "--server_address=:8080",
           ]
@@ -46,13 +47,8 @@ spec:
               value: "kubernetes"
             - name: USER_SERVICE
               value: "user.srv:8080"
-            - name: REDIS_HOST
-              value: "redis-master.api"
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: redis-password
-                  name: redis
+            - name: PAY_SERVICE
+              value: "pay.srv:8080"
           ports:
           - containerPort: 8080
             name: http
@@ -62,7 +58,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=user-api",
+            "--server_name=pay-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

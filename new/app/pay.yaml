@@ -1,11 +1,13 @@
+
+
 kind: Service
 apiVersion: v1
 metadata:
-  name: user-api
-  namespace: api
+  name: pay
+  namespace: srv
 spec:
   selector:
-    app: user-api
+    app: pay
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -16,43 +18,55 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-api
-  namespace: api
+  name: pay
+  namespace: srv
   labels:
-    app: user-api
+    app: pay
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-api
+      app: pay
   template:
     metadata:
       labels:
-        app: user-api
+        app: pay
     spec:
+      serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: user-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/user-api
+        - name: pay
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
           imagePullPolicy: Always
           command: [
-            "userApi",
+            "pay",
             "--selector=static",
             "--server_address=:8080",
           ]
           env:
-            - name: MICRO_REGISTRY
-              value: "kubernetes"
-            - name: USER_SERVICE
-              value: "user.srv:8080"
-            - name: REDIS_HOST
-              value: "redis-master.api"
-            - name: REDIS_PASSWORD
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: DB_HOST
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-host
+                    name: lecex-pay
+            - name: DB_USER
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-user
+                    name: lecex-pay
+            - name: DB_NAME
+              valueFrom:
+                  configMapKeyRef:
+                    key: db-name
+                    name: lecex-pay
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: redis-password
-                  name: redis
+                  key: mysql-pay-password
+                  name: lecex
           ports:
           - containerPort: 8080
             name: http
@@ -62,7 +76,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=user-api",
+            "--server_name=pay",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:
