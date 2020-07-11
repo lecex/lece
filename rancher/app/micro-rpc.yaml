@@ -63,7 +63,7 @@ spec:
           - name: MICRO_ENABLE_STATS
             value: "true"
           - name: MICRO_REGISTRY
-            value: kubernetes
+            value: mdns
           ports:
           - containerPort: 8080
             name: http

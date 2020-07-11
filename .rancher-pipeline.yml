@@ -26,10 +26,10 @@ stages:
 #   steps:
 #   - applyYamlConfig:
 #       path: ./rancher/app/micro-api.yaml
-# - name: User
-#   steps:
-#   - applyYamlConfig:
-#       path: ./rancher/app/user.yaml
+- name: User
+  steps:
+  - applyYamlConfig:
+      path: ./rancher/app/user.yaml
 - name: UserApi
   steps:
   - applyYamlConfig:

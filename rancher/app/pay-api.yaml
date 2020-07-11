@@ -44,7 +44,7 @@ spec:
           ]
           env:
             - name: MICRO_REGISTRY
-              value: "kubernetes"
+              value: "mdns"
             - name: USER_SERVICE
               value: "user.srv:8080"
             - name: PAY_SERVICE
