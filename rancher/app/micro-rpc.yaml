@@ -45,6 +45,7 @@ spec:
       labels:
         app: micro-rpc
     spec:
+      serviceAccountName: micro-services
       containers:
         - name: micro-rpc
           image: registry.cn-hangzhou.aliyuncs.com/lecex/micro:v2.4.0

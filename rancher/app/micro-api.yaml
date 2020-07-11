@@ -45,6 +45,7 @@ spec:
       labels:
         app: micro-api
     spec:
+      serviceAccountName: micro-services
       containers:
         - name: micro-api
           image: registry.cn-hangzhou.aliyuncs.com/lecex/micro:v2.4.0
