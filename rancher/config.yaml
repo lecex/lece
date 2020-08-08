@@ -8,6 +8,13 @@ data:
   app-key: NjFhMTBiNjVjMWY5Mjg5MTYxMzhhYzMzOTMxZGI2NTc=
   mysql-user-password: YWRtaW4xMjM=
   mysql-pay-password: YWRtaW4xMjM=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lecex
+  namespace: srv
+data:
   registry: "nats"
   registry-address: "nats-client.nats"
 ---

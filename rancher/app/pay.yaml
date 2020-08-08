@@ -29,12 +29,12 @@ spec:
               value: "15"
             - name: MICRO_REGISTRY
               valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     key: registry
                     name: lecex
             - name: MICRO_REGISTRY_ADDRESS
               valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     key: registry-address
                     name: lecex
             - name: DB_HOST
