@@ -45,10 +45,9 @@ spec:
       labels:
         app: micro-rpc
     spec:
-      serviceAccountName: micro-services
       containers:
         - name: micro-rpc
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/micro:v2.4.0
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/micro
           imagePullPolicy: Always
           args:
             - "api"
@@ -64,7 +63,15 @@ spec:
           - name: MICRO_ENABLE_STATS
             value: "true"
           - name: MICRO_REGISTRY
-            value: mdns
+            valueFrom:
+              secretKeyRef:
+                key: registry
+                name: lecex
+          - name: MICRO_REGISTRY_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                key: registry-address
+                name: lecex
           ports:
           - containerPort: 8080
             name: http

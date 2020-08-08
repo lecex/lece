@@ -59,9 +59,6 @@ spec:
       labels:
         app: ui
     spec:
-      serviceAccountName: micro-services
-      imagePullSecrets:
-      - name: pipeline-docker-registry
       containers:
         - name: ui
           image: registry.cn-hangzhou.aliyuncs.com/lecex/electron

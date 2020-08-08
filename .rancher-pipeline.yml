@@ -1,5 +1,5 @@
 stages:
-- name: Redis
+- name: App
   steps:
   - applyAppConfig:
       catalogTemplate: cattle-global-data:library-redis
@@ -22,16 +22,15 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./rancher/config.yaml
-- name: MicroRpc
+- name: Micro
   steps:
   - applyYamlConfig:
       path: ./rancher/app/micro-rpc.yaml
+  - applyYamlConfig:
+      path: ./rancher/app/micro-api.yaml
 - name: User
   steps:
   - applyYamlConfig:
       path: ./rancher/app/user.yaml
-- name: UserApi
-  steps:
   - applyYamlConfig:
       path: ./rancher/app/user-api.yaml
-notification: {}

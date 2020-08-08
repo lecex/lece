@@ -1,18 +1,3 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: pay-api
-  namespace: api
-spec:
-  selector:
-    app: pay-api
-  type: ClusterIP
-  ports:
-    - protocol: TCP
-      port: 8080
-      name: http
-      targetPort: 8080
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,9 +15,6 @@ spec:
       labels:
         app: pay-api
     spec:
-      serviceAccountName: micro-services
-      imagePullSecrets:
-      - name: pipeline-docker-registry
       containers:
         - name: pay-api
           image: registry.cn-hangzhou.aliyuncs.com/lecex/pay-api
@@ -44,11 +26,19 @@ spec:
           ]
           env:
             - name: MICRO_REGISTRY
-              value: "mdns"
+              valueFrom:
+                secretKeyRef:
+                  key: registry
+                  name: lecex
+            - name: MICRO_REGISTRY_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  key: registry-address
+                  name: lecex
             - name: USER_SERVICE
-              value: "user.srv:8080"
+              value: "user.srv"
             - name: PAY_SERVICE
-              value: "pay.srv:8080"
+              value: "pay.srv"
           ports:
           - containerPort: 8080
             name: http
