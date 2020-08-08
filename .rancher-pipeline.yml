@@ -10,10 +10,14 @@ stages:
         slave.persistence.enabled: "true"
       name: redis
       targetNamespace: api
-# - name: Ui
-#   steps:
-#   - applyYamlConfig:
-#       path: ./rancher/app/ui.yaml
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:github-nats
+      version: 4.3.7
+      answers:
+        auth.enabled: "false"
+        replicaCount: "5"
+      name: nats
+      targetNamespace: srv
 - name: Config
   steps:
   - applyYamlConfig:
@@ -22,10 +26,6 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./rancher/app/micro-rpc.yaml
-# - name: MicroApi
-#   steps:
-#   - applyYamlConfig:
-#       path: ./rancher/app/micro-api.yaml
 - name: User
   steps:
   - applyYamlConfig:
@@ -34,12 +34,4 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./rancher/app/user-api.yaml
-# - name: Pay
-#   steps:
-#   - applyYamlConfig:
-#       path: ./rancher/app/pay.yaml
-# - name: PayApi
-#   steps:
-#   - applyYamlConfig:
-#       path: ./rancher/app/pay-api.yaml
-# notification: {}
+notification: {}
