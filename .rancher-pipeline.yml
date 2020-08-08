@@ -2,10 +2,10 @@ stages:
 - name: App
   steps:
   - applyAppConfig:
-      catalogTemplate: cattle-global-data:library-redis
-      version: 9.0.2
+      catalogTemplate: cattle-global-data:github-redis
+      version: 9.5.5
       answers:
-        cluster.slaveCount: "2"
+        cluster.slaveCount: "5"
         master.persistence.enabled: "true"
         slave.persistence.enabled: "true"
       name: redis
@@ -34,3 +34,4 @@ stages:
       path: ./rancher/app/user.yaml
   - applyYamlConfig:
       path: ./rancher/app/user-api.yaml
+notification: {}
