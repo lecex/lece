@@ -6,8 +6,6 @@ stages:
       version: 9.5.5
       answers:
         cluster.slaveCount: "5"
-        master.persistence.enabled: "true"
-        slave.persistence.enabled: "true"
       name: redis
       targetNamespace: api
   - applyAppConfig:
