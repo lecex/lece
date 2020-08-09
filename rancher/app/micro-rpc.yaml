@@ -17,6 +17,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: micro-rpc
+  namespace: lecex
 spec:
   selector:
     app: micro-rpc
@@ -31,6 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: micro-rpc
+  namespace: lecex
   labels:
     app: micro-rpc
 spec:
