@@ -57,7 +57,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: mariadb-root-password
-                  name: mariadb
+                  name: mariadb-user
           ports:
           - containerPort: 8080
             name: http
