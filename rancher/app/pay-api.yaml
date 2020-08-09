@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pay-api
-  namespace: lecex
   labels:
     app: pay-api
 spec:
