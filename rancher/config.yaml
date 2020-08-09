@@ -1,8 +1,15 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+   name: lecex
+   labels:
+     name: lecex
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: lecex
-  namespace: srv
+  namespace: lecex
 data:
   admin-password: YWRtaW4xMjM=
   app-key: NjFhMTBiNjVjMWY5Mjg5MTYxMzhhYzMzOTMxZGI2NTc=
@@ -13,7 +20,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: lecex
-  namespace: api
+  namespace: lecex
 data:
   registry: "nats"
   registry-address: "nats-client.nats"
@@ -22,7 +29,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: lecex
-  namespace: srv
+  namespace: lecex
 data:
   registry: "nats"
   registry-address: "nats-client.nats"
@@ -41,7 +48,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: lecex-pay
-  namespace: srv
+  namespace: lecex
 data:
   db-host: 172.16.2.9
   db-user: "lecex_pay"

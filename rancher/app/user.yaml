@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user
-  namespace: srv
+  namespace: lecex
   labels:
     app: user
 spec:
