@@ -48,25 +48,16 @@ spec:
             - name: TOKEN_VALIDITY_PERIOD
               value: "15"
             - name: DB_HOST
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-host
-                    name: lecex-user
+              value: "mariadb-user"
             - name: DB_USER
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-user
-                    name: lecex-user
+              value: "root"
             - name: DB_NAME
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-name
-                    name: lecex-user
+              value: "user"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: mysql-user-password
-                  name: lecex
+                  key: mariadb-root-password
+                  name: mariadb
           ports:
           - containerPort: 8080
             name: http

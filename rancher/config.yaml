@@ -18,23 +18,3 @@ data:
   registry: "nats"
   registry-address: "nats-client"
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: lecex-user
-  namespace: lecex
-data:
-  db-host: 172.16.2.9
-  db-user: "lecex_user"
-  db-name: "lecex_user"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: lecex-pay
-  namespace: lecex
-data:
-  db-host: 172.16.2.9
-  db-user: "lecex_pay"
-  db-name: "lecex_pay"
----
