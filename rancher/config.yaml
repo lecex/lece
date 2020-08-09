@@ -16,16 +16,7 @@ metadata:
   namespace: lecex
 data:
   registry: "nats"
-  registry-address: "nats-client.nats"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: lecex
-  namespace: lecex
-data:
-  registry: "nats"
-  registry-address: "nats-client.nats"
+  registry-address: "nats-client"
 ---
 apiVersion: v1
 kind: ConfigMap
