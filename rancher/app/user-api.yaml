@@ -36,9 +36,9 @@ spec:
                     key: registry-address
                     name: lecex
             - name: USER_SERVICE
-              value: "user.srv"
+              value: "user"
             - name: REDIS_HOST
-              value: "redis-master.api"
+              value: "redis-slave"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:

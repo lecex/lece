@@ -38,7 +38,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: lecex-user
-  namespace: srv
+  namespace: lecex
 data:
   db-host: 172.16.2.9
   db-user: "lecex_user"

@@ -36,9 +36,9 @@ spec:
                   key: registry-address
                   name: lecex
             - name: USER_SERVICE
-              value: "user.srv"
+              value: "user"
             - name: PAY_SERVICE
-              value: "pay.srv"
+              value: "pay"
           ports:
           - containerPort: 8080
             name: http
