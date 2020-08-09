@@ -5,7 +5,7 @@ stages:
       catalogTemplate: cattle-global-data:github-redis
       version: 10.5.7
       answers:
-        cluster.slaveCount: "5"
+        cluster.slaveCount: "3"
       name: redis
       targetNamespace: lecex
   - applyAppConfig:
@@ -13,14 +13,14 @@ stages:
       version: 4.3.7
       answers:
         auth.enabled: "false"
-        replicaCount: "5"
+        replicaCount: "3"
       name: nats
       targetNamespace: lecex
   - applyAppConfig:
       catalogTemplate: cattle-global-data:github-mariadb
       version: 7.3.14
       answers:
-        slave.replicas: "5"
+        slave.replicas: "3"
       name: mariadb
       targetNamespace: lecex
 - name: Config
