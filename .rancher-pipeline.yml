@@ -16,13 +16,6 @@ stages:
         replicaCount: "3"
       name: nats
       targetNamespace: lecex
-  - applyAppConfig:
-      catalogTemplate: cattle-global-data:github-mariadb
-      version: 7.3.14
-      answers:
-        slave.replicas: "3"
-      name: mariadb
-      targetNamespace: lecex
 - name: Config
   steps:
   - applyYamlConfig:
@@ -39,4 +32,11 @@ stages:
       path: ./rancher/app/user.yaml
   - applyYamlConfig:
       path: ./rancher/app/user-api.yaml
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:github-mariadb
+      version: 7.3.14
+      answers:
+        slave.replicas: "3"
+      name: mariadb-user
+      targetNamespace: lecex
 notification: {}
