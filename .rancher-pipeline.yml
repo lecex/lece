@@ -1,4 +1,8 @@
 stages:
+- name: Config
+  steps:
+  - applyYamlConfig:
+      path: ./rancher/config.yaml
 - name: App
   steps:
   - applyAppConfig:
@@ -16,10 +20,6 @@ stages:
         replicaCount: "5"
       name: nats
       targetNamespace: lecex
-- name: Config
-  steps:
-  - applyYamlConfig:
-      path: ./rancher/config.yaml
 - name: Micro
   steps:
   - applyYamlConfig:
