@@ -37,6 +37,7 @@ stages:
       version: 7.3.14
       answers:
         slave.replicas: "3"
+        db.name: "user"
       name: mariadb-user
       targetNamespace: lecex
 notification: {}
