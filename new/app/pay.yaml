@@ -41,7 +41,6 @@ spec:
           imagePullPolicy: Always
           command: [
             "pay",
-            "--selector=static",
             "--server_address=:8080",
           ]
           env:

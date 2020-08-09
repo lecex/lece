@@ -39,7 +39,6 @@ spec:
           imagePullPolicy: Always
           command: [
             "userApi",
-            "--selector=static",
             "--server_address=:8080",
           ]
           env:
