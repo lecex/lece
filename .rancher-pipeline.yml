@@ -3,7 +3,7 @@ stages:
   steps:
   - applyAppConfig:
       catalogTemplate: cattle-global-data:github-redis
-      version: 9.5.5
+      version: 10.5.7
       answers:
         cluster.slaveCount: "5"
       name: redis
