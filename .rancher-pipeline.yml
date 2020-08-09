@@ -18,7 +18,7 @@ stages:
       targetNamespace: lecex
   - applyAppConfig:
       catalogTemplate: cattle-global-data:github-mariadb
-      version: 7.3.9
+      version: 7.3.14
       answers:
         slave.replicas: "5"
       name: mariadb
