@@ -20,6 +20,10 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./rancher/config.yaml
+- name: Ui
+  steps:
+  - applyYamlConfig:
+      path: ./rancher/app/ui.yaml
 - name: Micro
   steps:
   - applyYamlConfig:
@@ -40,4 +44,10 @@ stages:
       path: ./rancher/app/user.yaml
   - applyYamlConfig:
       path: ./rancher/app/user-api.yaml
+- name: Pay
+  steps:
+  - applyYamlConfig:
+      path: ./rancher/app/pay.yaml
+  - applyYamlConfig:
+      path: ./rancher/app/pay-api.yaml
 notification: {}
