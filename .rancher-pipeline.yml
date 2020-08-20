@@ -46,6 +46,14 @@ stages:
       path: ./rancher/app/user-api.yaml
 - name: Pay
   steps:
+  - applyAppConfig:
+    catalogTemplate: cattle-global-data:github-mariadb
+    version: 7.3.14
+    answers:
+      slave.replicas: "3"
+      db.name: "pay"
+    name: mariadb-pay
+    targetNamespace: lecex
   - applyYamlConfig:
       path: ./rancher/app/pay.yaml
   - applyYamlConfig:

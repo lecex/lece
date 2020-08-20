@@ -21,7 +21,6 @@ spec:
           imagePullPolicy: Always
           command: [
             "pay",
-            "--selector=static",
             "--server_address=:8080",
           ]
           env:
@@ -38,25 +37,16 @@ spec:
                     key: registry-address
                     name: lecex
             - name: DB_HOST
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-host
-                    name: lecex-pay
+              value: "mariadb-pay"
             - name: DB_USER
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-user
-                    name: lecex-pay
+              value: "root"
             - name: DB_NAME
-              valueFrom:
-                  configMapKeyRef:
-                    key: db-name
-                    name: lecex-pay
+              value: "pay"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: mysql-pay-password
-                  name: lecex
+                  key: mariadb-root-password
+                  name: mariadb-pay
           ports:
           - containerPort: 8080
             name: http
