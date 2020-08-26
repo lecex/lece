@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: lecex
+data:
+  admin-password: YWRtaW4xMjM=
+  app-key: NjFhMTBiNjVjMWY5Mjg5MTYxMzhhYzMzOTMxZGI2NTc=
+  mysql-user-password: YWRtaW4xMjM=
+  mysql-pay-password: YWRtaW4xMjM=

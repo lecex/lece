@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pay
+  labels:
+    app: pay
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: pay
+  template:
+    metadata:
+      labels:
+        app: pay
+    spec:
+      containers:
+        - name: pay
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [
+            "pay",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: DB_HOST
+              value: "{{ include "lecex.fullname" . }}-mariadb"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "pay"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: {{ include "lecex.fullname" . }}-mariadb
+            - name: MICRO_REGISTRY
+              value: "nats"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "{{ include "lecex.fullname" . }}-nats-client"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=pay",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

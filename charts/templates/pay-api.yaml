@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pay-api
+  labels:
+    app: pay-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: pay-api
+  template:
+    metadata:
+      labels:
+        app: pay-api
+    spec:
+      containers:
+        - name: pay-api
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay-api
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [
+            "payApi",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: USER_SERVICE
+              value: "user"
+            - name: PAY_SERVICE
+              value: "pay"
+            - name: MICRO_REGISTRY
+              value: "nats"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "{{ include "lecex.fullname" . }}-nats-client"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=pay-api",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

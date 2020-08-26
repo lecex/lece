@@ -1,0 +1,56 @@
+# 负载均衡
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ui
+spec:
+  rules:
+  - host: xip.io
+    http:
+      paths:
+        - backend:
+            serviceName: ui
+            servicePort: http
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui
+spec:
+  selector:
+    app: ui
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      name: http
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  labels:
+    app: ui
+spec:
+  {{ if .Values.ui.replicaCount }}
+  replicas: {{ .Values.ui.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+        - name: ui 
+          image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
