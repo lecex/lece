@@ -50,6 +50,9 @@ spec:
         - name: ui 
           image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: BASE_URL
+              value: {{ .Values.ui.baseUrl }}
           ports:
           - containerPort: 80
             name: http

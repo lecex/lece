@@ -23,8 +23,6 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: USER_SERVICE
-              value: "user"
             - name: REDIS_HOST
               value: "{{ include "lecex.fullname" . }}-redis-master"
             - name: REDIS_PASSWORD

@@ -89,7 +89,8 @@ ui:
     #  - secretName: chart-example-tls
     #    hosts:
     #      - chart-example.local
-
+  baseUrl: '/rpc'
+  
 nats:
   replicaCount: "5"
 

@@ -23,10 +23,6 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: USER_SERVICE
-              value: "user"
-            - name: PAY_SERVICE
-              value: "pay"
             - name: MICRO_REGISTRY
               value: "nats"
             - name: MICRO_REGISTRY_ADDRESS
