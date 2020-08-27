@@ -33,9 +33,6 @@ metadata:
   labels:
     app: phpmyadmin
 spec:
-  {{ if .Values.phpmyadmin.replicaCount }}
-  replicas: {{ .Values.phpmyadmin.replicaCount }}
-  {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
