@@ -34,7 +34,6 @@ metadata:
     app: phpmyadmin
 spec:
   replicas: {{ .Values.replicaCount }}
-  {{ end }}
   selector:
     matchLabels:
       app: phpmyadmin
