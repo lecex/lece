@@ -72,7 +72,7 @@ ui:
   image:
     repository: registry.cn-hangzhou.aliyuncs.com/lecex/electron
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   service:
     type: ClusterIP
     port: 80
@@ -90,7 +90,7 @@ ui:
     #    hosts:
     #      - chart-example.local
   baseUrl: '/rpc'
-  
+
 nats:
   replicaCount: 5
 
