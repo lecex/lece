@@ -92,17 +92,17 @@ ui:
   baseUrl: '/rpc'
   
 nats:
-  replicaCount: "5"
+  replicaCount: 5
 
   auth:
     enabled: false
 
 mariadb:
   slave:
-    replicas: "3"
+    replicas: 3
 
 mysqldump:
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   mysql:
     host: "lecex-mariadb"
     existingSecret: "lecex-mariadb"
