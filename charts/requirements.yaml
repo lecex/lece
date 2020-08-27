@@ -13,5 +13,3 @@ dependencies:
   version: 2.x.x
   repository: http://mirror.azure.cn/kubernetes/charts/
   alias: mysqldump
-- name: mariadb
-  version: 7.x.x

@@ -97,10 +97,6 @@ nats:
   auth:
     enabled: false
 
-redis:
-  cluster:
-    slaveCount: "3"
-
 mariadb:
   slave:
     replicas: "3"
