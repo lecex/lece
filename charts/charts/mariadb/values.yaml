@@ -257,7 +257,7 @@ master:
   ##
   extraEnvVars:
   - name: TZ
-    value: "Asia/shanghai"
+    value: "Asia/Shanghai"
   ## Configure MySQL with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -390,7 +390,7 @@ slave:
   ##
   extraEnvVars:
     - name: TZ
-      value: "Asia/shanghai"
+      value: "Asia/Shanghai"
 
   ## Configure MySQL slave with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
