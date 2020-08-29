@@ -34,7 +34,7 @@ metadata:
   labels:
     app: kodexplorer
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: kodexplorer
