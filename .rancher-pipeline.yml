@@ -8,14 +8,6 @@ stages:
         cluster.slaveCount: "3"
       name: redis
       targetNamespace: lecex
-  - applyAppConfig:
-      catalogTemplate: cattle-global-data:github-nats
-      version: 4.3.7
-      answers:
-        auth.enabled: "false"
-        replicaCount: "3"
-      name: nats
-      targetNamespace: lecex
 - name: Config
   steps:
   - applyYamlConfig:

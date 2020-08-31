@@ -1,3 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: user
+spec:
+  selector:
+    app: user
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,7 +47,7 @@ spec:
                 secretKeyRef:
                   key: app-key
                   name: lecex
-            - name: TOKEN_VALIDITY_PERIOD
+            - name: TOKEN_VALIDITY_PERIOD # token 过期时间15天
               value: "15"
             - name: DB_HOST
               value: "{{ include "lecex.fullname" . }}-mariadb"
@@ -47,9 +61,9 @@ spec:
                   key: mariadb-root-password
                   name: {{ include "lecex.fullname" . }}-mariadb
             - name: MICRO_REGISTRY
-              value: "nats"
-            - name: MICRO_REGISTRY_ADDRESS
-              value: "{{ include "lecex.fullname" . }}-nats-client"
+              value: "static"
+            - name: MICRO_SELECTOR
+              value: "static"
           ports:
           - containerPort: 8080
             name: http

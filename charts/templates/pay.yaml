@@ -1,3 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pay
+spec:
+  selector:
+    app: pay
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,8 +37,6 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: TOKEN_VALIDITY_PERIOD
-              value: "15"
             - name: DB_HOST
               value: "{{ include "lecex.fullname" . }}-mariadb"
             - name: DB_USER
@@ -37,9 +49,9 @@ spec:
                   key: mariadb-root-password
                   name: {{ include "lecex.fullname" . }}-mariadb
             - name: MICRO_REGISTRY
-              value: "nats"
-            - name: MICRO_REGISTRY_ADDRESS
-              value: "{{ include "lecex.fullname" . }}-nats-client"
+              value: "static"
+            - name: MICRO_SELECTOR
+              value: "static"
           ports:
           - containerPort: 8080
             name: http

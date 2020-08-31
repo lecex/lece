@@ -14,7 +14,4 @@ kind: ConfigMap
 metadata:
   name: lecex
   namespace: lecex
-data:
-  registry: "nats"
-  registry-address: "nats-client"
 ---

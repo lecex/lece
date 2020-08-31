@@ -1,3 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "lecex.fullname" . }}-pay-api
+spec:
+  selector:
+    app: pay-api
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,9 +38,13 @@ spec:
           ]
           env:
             - name: MICRO_REGISTRY
-              value: "nats"
-            - name: MICRO_REGISTRY_ADDRESS
-              value: "{{ include "lecex.fullname" . }}-nats-client"
+              value: "static"
+            - name: MICRO_SELECTOR
+              value: "static"
+            - name: USER_SERVICE
+              value: "user"
+            - name: PAY_SERVICE
+              value: "pay"
           ports:
           - containerPort: 8080
             name: http

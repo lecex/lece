@@ -2,9 +2,6 @@ dependencies:
 - name: redis
   version: 10.x.x
   repository: http://mirror.azure.cn/kubernetes/charts/
-- name: nats
-  version: 4.x.x
-  repository: http://mirror.azure.cn/kubernetes/charts/
 - name: mariadb
   version: 7.x.x
   repository: http://mirror.azure.cn/kubernetes/charts/

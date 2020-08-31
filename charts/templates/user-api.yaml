@@ -1,3 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "lecex.fullname" . }}-user-api
+spec:
+  selector:
+    app: user-api
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: http
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,9 +45,11 @@ spec:
                   key: redis-password
                   name: {{ include "lecex.fullname" . }}-redis
             - name: MICRO_REGISTRY
-              value: "nats"
-            - name: MICRO_REGISTRY_ADDRESS
-              value: "{{ include "lecex.fullname" . }}-nats-client"
+              value: "static"
+            - name: MICRO_SELECTOR
+              value: "static"
+            - name: USER_SERVICE
+              value: "user"
           ports:
           - containerPort: 8080
             name: http

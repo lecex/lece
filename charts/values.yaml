@@ -91,12 +91,6 @@ ui:
     #      - chart-example.local
   baseUrl: '/rpc'
 
-nats:
-  replicaCount: 5
-
-  auth:
-    enabled: false
-
 redis:
   cluster:
     slaveCount: 3
