@@ -3,7 +3,11 @@ kind: Secret
 metadata:
   name: lecex
 data:
-  admin-password: YWRtaW4xMjM=
-  app-key: NjFhMTBiNjVjMWY5Mjg5MTYxMzhhYzMzOTMxZGI2NTc=
-  mysql-user-password: YWRtaW4xMjM=
-  mysql-pay-password: YWRtaW4xMjM=
+  {{- if not (empty .Values.user.password) }}
+  admin-password: "{{ .Values.user.password | b64enc }}"
+  {{- else if (not .Values.user.password) }}
+  admin-password: "{{ randAlphaNum 10 | b64enc }}"
+  {{ else }}
+  admin-password: {{ required "A User Admin Password is required!" .Values.user.password }}
+  {{- end }}
+  app-key: "{{ randAlphaNum 32 | b64enc }}"

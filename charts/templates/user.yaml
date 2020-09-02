@@ -19,7 +19,11 @@ metadata:
   labels:
     app: user
 spec:
+  {{ if .Values.user.replicaCount }}
+  replicas: {{ .Values.user.replicaCount }}
+  {{ else }}
   replicas: {{ .Values.replicaCount }}
+  {{ end }}
   selector:
     matchLabels:
       app: user
@@ -30,8 +34,8 @@ spec:
     spec:
       containers:
         - name: user
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/user
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.user.image.repository }}:{{ .Values.user.image.tag }}"
+          imagePullPolicy: {{ .Values.user.image.pullPolicy }}
           command: [
             "user",
             "--server_address=:8080",

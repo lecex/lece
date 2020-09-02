@@ -19,7 +19,11 @@ metadata:
   labels:
     app: user-api
 spec:
+  {{ if .Values.userApi.replicaCount }}
+  replicas: {{ .Values.userApi.replicaCount }}
+  {{ else }}
   replicas: {{ .Values.replicaCount }}
+  {{ end }}
   selector:
     matchLabels:
       app: user-api
@@ -30,8 +34,8 @@ spec:
     spec:
       containers:
         - name: user-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/user-api
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.userApi.image.repository }}:{{ .Values.userApi.image.tag }}"
+          imagePullPolicy: {{ .Values.userApi.image.pullPolicy }}
           command: [
             "userApi",
             "--server_address=:8080",

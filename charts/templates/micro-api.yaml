@@ -44,8 +44,8 @@ spec:
     spec:
       containers:
         - name: micro-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/micro
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.micro.image.repository }}:{{ .Values.micro.image.tag }}"
+          imagePullPolicy: {{ .Values.micro.image.pullPolicy }}
           args:
             - "api"
             - "--handler=api"

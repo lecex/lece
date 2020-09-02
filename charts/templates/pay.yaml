@@ -19,7 +19,11 @@ metadata:
   labels:
     app: pay
 spec:
+  {{ if .Values.pay.replicaCount }}
+  replicas: {{ .Values.pay.replicaCount }}
+  {{ else }}
   replicas: {{ .Values.replicaCount }}
+  {{ end }}
   selector:
     matchLabels:
       app: pay
@@ -30,8 +34,8 @@ spec:
     spec:
       containers:
         - name: pay
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.pay.image.repository }}:{{ .Values.pay.image.tag }}"
+          imagePullPolicy: {{ .Values.pay.image.pullPolicy }}
           command: [
             "pay",
             "--server_address=:8080",
