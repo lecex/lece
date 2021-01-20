@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  nats:
+    # A container that exposes an API to show its IP address
+    image: nats
+    ports:
+      # The HTTP port
+      - "4222:4222"
+  micro-rpc:
+    # A container that exposes an API to show its IP address
+    image: lecex/micro:v2.4.3
+    labels:
+      - "traefik.http.routers.microrpc.rule=Host(`microrpc.docker.localhost`)"
+    command:
+      - "api"
+      - "--handler=rpc"
+      - "--enable_cors=true"
+    environment:
+      MICRO_API_NAMESPACE: 'lecex-'
+      MICRO_SERVER_NAME: micro-rpc
+      MICRO_ENABLE_STATS: "true"
+      MICRO_REGISTRY: static
+      MICRO_SELECTOR: static
+  user-api:
+    # A container that exposes an API to show its IP address
+    image: lecex/user-api:${VERSION}
+    labels:
+      - "traefik.http.routers.userapi.rule=Host(`lecex-user-api.localhost`)"
+    command:
+      - "userApi"
+      - "--server_address=:8080"
+    environment:
+      REDIS_HOST: lecex
+      REDIS_PASSWORD: micro-rpc
+      USER_SERVICE: "user"
+      # MICRO_REGISTRY: nats
+      # MICRO_REGISTRY_ADDRESS: "127.0.0.1:4222"

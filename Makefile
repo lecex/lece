@@ -8,3 +8,6 @@ tag:
 .PHONY: helm
 helm:
 	helm push charts/ 133553-lecex
+.PHONY: run
+run:
+	docker-compose -f traefik/docker-compose.yml --env-file traefik/.env  up -d
