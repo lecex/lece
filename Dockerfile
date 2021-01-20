@@ -13,5 +13,5 @@ FROM bigrocs/alpine:ca-data
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 COPY --from=builder /go/src/github.com/bigrocs/user/bin/micro /usr/local/bin/
-CMD ["micro api  --handler=rpc  --namespace=go.micro.api --address=:8080"]
+CMD ["micro api --handler=rpc --namespace=go.micro.api --address=:8080 --enable_cors=true"]
 EXPOSE 8080
