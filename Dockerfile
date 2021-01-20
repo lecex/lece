@@ -1,5 +1,5 @@
 FROM bigrocs/golang-gcc:1.13 as builder
-RUN apk --no-cache add make git libtool
+RUN apk --no-cache add git libtool
 
 WORKDIR /go/src/github.com/bigrocs/micro
 RUN git clone https://github.com/bigrocs/micro.git /go/src/github.com/bigrocs/micro
