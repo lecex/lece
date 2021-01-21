@@ -30,16 +30,14 @@ services:
       - "--handler=rpc"
       - "--enable_cors=true"
     environment:
-      MICRO_API_NAMESPACE: 'lecex-'
+      MICRO_API_NAMESPACE: 'lecex'
       MICRO_SERVER_NAME: micro-rpc
       MICRO_ENABLE_STATS: "true"
-      MICRO_REGISTRY: static
-      MICRO_SELECTOR: static
+      # MICRO_REGISTRY: nats
+      # MICRO_REGISTRY_ADDRESS: "127.0.0.1:4222"
   user-api:
     # A container that exposes an API to show its IP address
     image: lecex/user-api:${VERSION}
-    labels:
-      - "traefik.http.routers.userapi.rule=Host(`lecex-user-api.localhost`)"
     command:
       - "userApi"
       - "--server_address=:8080"

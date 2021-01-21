@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socialite
+  namespace: lecex
+  labels:
+    app: socialite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: socialite
+  template:
+    metadata:
+      labels:
+        app: socialite
+    spec:
+      containers:
+        - name: socialite
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/socialite
+          imagePullPolicy: Always
+          command: [
+            "socialite",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: MICRO_REGISTRY
+              valueFrom:
+                  configMapKeyRef:
+                    key: registry
+                    name: lecex
+            - name: MICRO_REGISTRY_ADDRESS
+              valueFrom:
+                  configMapKeyRef:
+                    key: registry-address
+                    name: lecex
+            - name: DB_HOST
+              value: "mariadb-socialite"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "socialite"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: mariadb-socialite
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=socialite",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

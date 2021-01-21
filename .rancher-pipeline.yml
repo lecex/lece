@@ -50,4 +50,18 @@ stages:
       path: ./rancher/app/pay.yaml
   - applyYamlConfig:
       path: ./rancher/app/pay-api.yaml
+- name: Socialite
+  steps:
+  - applyAppConfig:
+    catalogTemplate: cattle-global-data:github-mariadb
+    version: 7.3.14
+    answers:
+      slave.replicas: "3"
+      db.name: "socialite"
+    name: mariadb-socialite
+    targetNamespace: lecex
+  - applyYamlConfig:
+      path: ./rancher/app/socialite.yaml
+  - applyYamlConfig:
+      path: ./rancher/app/socialite-api.yaml
 notification: {}

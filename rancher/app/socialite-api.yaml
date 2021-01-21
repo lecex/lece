@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socialite-api
+  namespace: lecex
+  labels:
+    app: socialite-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: socialite-api
+  template:
+    metadata:
+      labels:
+        app: socialite-api
+    spec:
+      containers:
+        - name: socialite-api
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/socialite-api
+          imagePullPolicy: Always
+          command: [
+            "socialiteApi",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: MICRO_REGISTRY
+              valueFrom:
+                configMapKeyRef:
+                  key: registry
+                  name: lecex
+            - name: MICRO_REGISTRY_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  key: registry-address
+                  name: lecex
+            - name: USER_SERVICE
+              value: "user"
+            - name: SOCIALITE_SERVICE
+              value: "socialite"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=socialite-api",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
