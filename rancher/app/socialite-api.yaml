@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: socialite-api
-  namespace: lecex
+  namespace: lecexnamespace
   labels:
     app: socialite-api
 spec:

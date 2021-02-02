@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: micro-rpc
-  namespace: lecex
+  namespace: lecexnamespace
 spec:
   rules:
   - host: xip.io
@@ -17,7 +17,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: micro-rpc
-  namespace: lecex
+  namespace: lecexnamespace
 spec:
   selector:
     app: micro-rpc
@@ -32,7 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: micro-rpc
-  namespace: lecex
+  namespace: lecexnamespace
   labels:
     app: micro-rpc
 spec:
