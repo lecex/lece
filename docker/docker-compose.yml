@@ -1,0 +1,54 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+### MySQL ################################################
+  mysql:
+      build:
+        context: ./mysql
+        args:
+          - MYSQL_VERSION=${MYSQL_VERSION}
+      environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - TZ=${WORKSPACE_TIMEZONE}
+      volumes:
+        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+      ports:
+        - "${MYSQL_PORT}:3306"
+  micro:
+    image: lecex/micro:v2.4.3
+    restart: always
+    command:
+      - "api"
+      - "--handler=rpc"
+      - "--enable_cors=true"
+    ports:
+      - 8080:8080
+    environment:
+      MICRO_SERVER_NAME: micro-rpc
+      MICRO_ENABLE_STATS: "true"
+  user:
+    # A container that exposes an API to show its IP address
+    image: lecex/user
+    command:
+      - "user"
+    environment:
+      ADMIN_PASSWORD: admin123
+      APP_KEY: 123456789
+      TOKEN_VALIDITY_PERIOD: 15
+      DB_HOST: ${DOCKER_HOST_IP}
+      DB_USER: root
+      DB_NAME: user
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  user-api:
+    # A container that exposes an API to show its IP address
+    image: lecex/user-api
+    command:
+      - "userApi"
+    environment:
+      REDIS_HOST: lecex
+      REDIS_PASSWORD: micro-rpc
