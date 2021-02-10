@@ -10,4 +10,6 @@ helm:
 	helm push charts/ 133553-lecex
 .PHONY: run
 run:
-	docker-compose -f traefik/docker-compose.yml --env-file traefik/.env  up -d
+	docker-compose -f docker/docker-compose.yml --env-file docker/.env  up -d
+dev:
+	docker-compose -f docker/docker-compose.yml --env-file docker/.env  up --build

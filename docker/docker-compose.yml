@@ -2,7 +2,7 @@
 version: '3.1'
 
 services:
-### MySQL ################################################
+  ### MySQL ################################################
   mysql:
       build:
         context: ./mysql
@@ -19,36 +19,89 @@ services:
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
+  ### Redis ################################################
+  redis:
+      build: ./redis
+      command:
+      - "--requirepass ${REDIS_PASSWORD}"
+      volumes:
+        - ${DATA_PATH_HOST}/redis:/data
+      ports:
+        - "${REDIS_PORT}:6379"
+  ### MICERO ################################################
   micro:
-    image: lecex/micro:v2.4.3
+    image: ${MICERO_IMAGE}
     restart: always
     command:
       - "api"
       - "--handler=rpc"
       - "--enable_cors=true"
     ports:
-      - 8080:8080
+      - ${MICERO_PORT}:8080
     environment:
       MICRO_SERVER_NAME: micro-rpc
       MICRO_ENABLE_STATS: "true"
+  ### UI ################################################
+  UI:
+    image: ${UI_IMAGE}
+    ports:
+      - ${UI_PORT}:80
+    environment:
+      BASE_URL: ${UI_BASE_URL}
+  ### USER ################################################
   user:
-    # A container that exposes an API to show its IP address
-    image: lecex/user
+    image: ${USER_IMAGE}
     command:
       - "user"
     environment:
-      ADMIN_PASSWORD: admin123
-      APP_KEY: 123456789
+      ADMIN_PASSWORD: ${USER_ADMIN_PASSWORD}
+      APP_KEY: ${USER_APP_KEY}
       TOKEN_VALIDITY_PERIOD: 15
       DB_HOST: ${DOCKER_HOST_IP}
-      DB_USER: root
-      DB_NAME: user
+      DB_USER: ${USER_DB_USER}
+      DB_NAME: ${USER_DB_NAME}
       DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  ### USER-API ################################################
   user-api:
-    # A container that exposes an API to show its IP address
-    image: lecex/user-api
+    image: ${USER_API_IMAGE}
     command:
       - "userApi"
     environment:
-      REDIS_HOST: lecex
-      REDIS_PASSWORD: micro-rpc
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+  ### PAY ################################################
+  pay:
+    image: ${PAY_IMAGE}
+    command:
+      - "pay"
+    environment:
+      DB_HOST: ${DOCKER_HOST_IP}
+      DB_USER: ${PAY_DB_USER}
+      DB_NAME: ${PAY_DB_NAME}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  ### PAY-API ################################################
+  pay-api:
+    image: ${PAY_API_IMAGE}
+    command:
+      - "payApi"
+    environment:
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+  ### MESSAGE ################################################
+  message:
+    image: ${MESSAGE_IMAGE}
+    command:
+      - "message"
+    environment:
+      DB_HOST: ${DOCKER_HOST_IP}
+      DB_USER: ${MESSAGE_DB_USER}
+      DB_NAME: ${MESSAGE_DB_NAME}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  ### MESSAGE-API ################################################
+  message-api:
+    image: ${MESSAGE_API_IMAGE}
+    command:
+      - "messageApi"
+    environment:
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
