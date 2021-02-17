@@ -105,3 +105,21 @@ services:
     environment:
       REDIS_HOST: ${DOCKER_HOST_IP}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+  ### SOCIALITE  ################################################
+  socialite:
+    image: ${SOCIALITE_IMAGE}
+    command:
+      - "socialite"
+    environment:
+      DB_HOST: ${DOCKER_HOST_IP}
+      DB_USER: ${SOCIALITE_DB_USER}
+      DB_NAME: ${SOCIALITE_DB_NAME}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  ### SOCIALITE-API ################################################
+  socialite-api:
+    image: ${SOCIALITE_API_IMAGE}
+    command:
+      - "socialiteApi"
+    environment:
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
