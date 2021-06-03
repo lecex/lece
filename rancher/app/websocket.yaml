@@ -1,3 +1,33 @@
+# 负载均衡
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: websocket
+  namespace: lecex
+spec:
+  rules:
+  - host: xip.io
+    http:
+      paths:
+        - backend:
+            serviceName: websocket
+            servicePort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket
+  namespace: lecex
+spec:
+  selector:
+    app: websocket
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,6 +59,8 @@ spec:
               value: "static"
             - name: MICRO_API_NAMESPACE
               value: "go.micro.api."
+            - name: MICRO_WEB_NAMESPACE
+              value: "go.micro.web."
             - name: MICRO_SRV_NAMESPACE
               value: "go.micro.srv."
             - name: SERVER_ADDRESS
