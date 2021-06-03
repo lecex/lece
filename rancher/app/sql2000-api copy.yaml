@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql2000-api
+  namespace: lecex
+  labels:
+    app: sql2000-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql2000-api
+  template:
+    metadata:
+      labels:
+        app: sql2000-api
+    spec:
+      containers:
+        - name: sql2000-api
+          image: lecex/sql2000-api
+          imagePullPolicy: Always
+          command: [
+            "sql2000Api",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: MICRO_REGISTRY
+              value: "static"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "static"
+            - name: USER_SERVICE
+              value: "user"
+            - name: SQL2000_SERVICE
+              value: "sql2000"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=sql2000-api",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

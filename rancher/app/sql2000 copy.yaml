@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql2000
+  namespace: lecex
+  labels:
+    app: sql2000
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql2000
+  template:
+    metadata:
+      labels:
+        app: sql2000
+    spec:
+      containers:
+        - name: sql2000
+          image: lecex/sql2000
+          imagePullPolicy: Always
+          command: [
+            "sql2000",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
+            - name: MICRO_REGISTRY
+              value: "static"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "static"
+            - name: DB_HOST
+              value: "mariadb-sql2000"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "sql2000"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: mariadb-sql2000
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=sql2000",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
