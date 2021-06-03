@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket
+  namespace: lecex
+  labels:
+    app: websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websocket
+  template:
+    metadata:
+      labels:
+        app: websocket
+    spec:
+      containers:
+        - name: websocket
+          image: lecex/websocket
+          imagePullPolicy: Always
+          command: [
+            "websocket",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: MICRO_REGISTRY
+              value: "static"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "static"
+            - name: USER_SERVICE
+              value: "user"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=websocket",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

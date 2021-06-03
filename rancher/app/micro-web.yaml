@@ -1,0 +1,94 @@
+# 负载均衡
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: micro-web
+  namespace: lecexnamespace
+spec:
+  rules:
+  - host: xip.io
+    http:
+      paths:
+        - backend:
+            serviceName: micro-web
+            servicePort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-web
+  namespace: lecexnamespace
+spec:
+  selector:
+    app: micro-web
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-web
+  namespace: lecexnamespace
+  labels:
+    app: micro-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micro-web
+  template:
+    metadata:
+      labels:
+        app: micro-web
+    spec:
+      containers:
+        - name: micro-web
+          image: registry.cn-hangzhou.aliyuncs.com/lecex/micro
+          imagePullPolicy: Always
+          args:
+            - "api"
+            - "--handler=web"
+            - "--address=8080"
+          env:
+          - name: MICRO_API_NAMESPACE
+            value: go.micro.api
+          - name: MICRO_SERVER_NAME
+            value: micro-web
+          - name: MICRO_SERVER_ADDRESS
+            value: 0.0.0.0:8989
+          - name: MICRO_ENABLE_STATS
+            value: "true"
+          - name: MICRO_REGISTRY
+            valueFrom:
+              configMapKeyRef:
+                key: registry
+                name: lecex
+          - name: MICRO_REGISTRY_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                key: registry-address
+                name: lecex
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=micro-web",
+            "--server_address=0.0.0.0:8989"
+          ]
+          image: microhq/health:kubernetes
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
+
+
