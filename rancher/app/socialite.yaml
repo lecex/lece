@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: socialite
-  namespace: lecexnamespace
+  namespace: lecex
   labels:
     app: socialite
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: socialite
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/socialite
+          image: lecex/socialite
           imagePullPolicy: Always
           command: [
             "socialite",
@@ -27,15 +27,9 @@ spec:
             - name: TOKEN_VALIDITY_PERIOD
               value: "15"
             - name: MICRO_REGISTRY
-              valueFrom:
-                  configMapKeyRef:
-                    key: registry
-                    name: lecex
+              value: "static"
             - name: MICRO_REGISTRY_ADDRESS
-              valueFrom:
-                  configMapKeyRef:
-                    key: registry-address
-                    name: lecex
+              value: "static"
             - name: DB_HOST
               value: "mariadb-socialite"
             - name: DB_USER

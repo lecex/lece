@@ -123,3 +123,17 @@ services:
     environment:
       REDIS_HOST: ${DOCKER_HOST_IP}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+  ### SQL2000  ################################################
+  sql2000:
+    image: ${SQL2000_IMAGE}
+    command:
+      - "sql2000"
+  ### SQL2000-API ################################################
+  sql2000-api:
+    image: ${SQL2000_API_IMAGE}
+    command:
+      - "sql2000Api"
+    environment:
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}

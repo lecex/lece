@@ -1,43 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pay-api
+  name: sql2000
   namespace: lecex
   labels:
-    app: pay-api
+    app: sql2000
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pay-api
+      app: sql2000
   template:
     metadata:
       labels:
-        app: pay-api
+        app: sql2000
     spec:
       containers:
-        - name: pay-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/pay-api
+        - name: sql2000
+          image: lecex/sql2000
           imagePullPolicy: Always
           command: [
-            "payApi",
+            "sql2000",
             "--server_address=:8080",
           ]
           env:
+            - name: TOKEN_VALIDITY_PERIOD
+              value: "15"
             - name: MICRO_REGISTRY
-              valueFrom:
-                configMapKeyRef:
-                  key: registry
-                  name: lecex
+              value: "static"
             - name: MICRO_REGISTRY_ADDRESS
+              value: "static"
+            - name: DB_HOST
+              value: "mariadb-sql2000"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "sql2000"
+            - name: DB_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  key: registry-address
-                  name: lecex
-            - name: USER_SERVICE
-              value: "user"
-            - name: PAY_SERVICE
-              value: "pay"
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: mariadb-sql2000
           ports:
           - containerPort: 8080
             name: http
@@ -47,7 +50,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=pay-api",
+            "--server_name=sql2000",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: socialite-api
-  namespace: lecexnamespace
+  namespace: lecex
   labels:
     app: socialite-api
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: socialite-api
-          image: registry.cn-hangzhou.aliyuncs.com/lecex/socialite-api
+          image: lecex/socialite-api
           imagePullPolicy: Always
           command: [
             "socialiteApi",
