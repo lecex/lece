@@ -63,15 +63,9 @@ spec:
           - name: MICRO_ENABLE_STATS
             value: "true"
           - name: MICRO_REGISTRY
-            valueFrom:
-              configMapKeyRef:
-                key: registry
-                name: lecex
-          - name: MICRO_REGISTRY_ADDRESS
-            valueFrom:
-              configMapKeyRef:
-                key: registry-address
-                name: lecex
+            value: "static"
+          - name: MICRO_SELECTOR
+            value: "static"
           ports:
           - containerPort: 8080
             name: http
