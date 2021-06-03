@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: device-api
+  name: websocket
   namespace: lecex
   labels:
-    app: device-api
+    app: websocket
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: device-api
+      app: websocket
   template:
     metadata:
       labels:
-        app: device-api
+        app: websocket
     spec:
       containers:
-        - name: device-api
-          image: lecex/device-api
+        - name: websocket
+          image: lecex/websocket
           imagePullPolicy: Always
           command: [
-            "deviceApi",
+            "websocket",
             "--server_address=:8080",
           ]
           env:
@@ -28,10 +28,6 @@ spec:
               value: "static"
             - name: MICRO_REGISTRY_ADDRESS
               value: "static"
-            - name: USER_SERVICE
-              value: "user"
-            - name: DEVICE_SERVICE
-              value: "device"
           ports:
           - containerPort: 8080
             name: http
@@ -41,7 +37,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=device-api",
+            "--server_name=websocket",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:
