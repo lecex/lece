@@ -21,13 +21,18 @@ spec:
           imagePullPolicy: Always
           command: [
             "websocket",
-            "--server_address=:8080",
           ]
           env:
             - name: MICRO_REGISTRY
               value: "static"
             - name: MICRO_REGISTRY_ADDRESS
               value: "static"
+            - name: MICRO_API_NAMESPACE
+              value: "go.micro.api."
+            - name: MICRO_SRV_NAMESPACE
+              value: "go.micro.srv."
+            - name: SERVER_ADDRESS
+              value: ":8080"
           ports:
           - containerPort: 8080
             name: http
