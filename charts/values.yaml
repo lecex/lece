@@ -71,14 +71,14 @@ micro:
   replicaCount: 0
   image:
     repository: lecex/micro
-    tag: v2.4.2
+    tag: v2.4.6
     pullPolicy: IfNotPresent
 
 ui:
   replicaCount: 0
   image:
-    repository: registry.cn-hangzhou.aliyuncs.com/lecex/electron
-    tag: v1.2.7
+    repository: lecex/electron
+    tag: v1.3.2
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
@@ -89,7 +89,7 @@ user:
   replicaCount: 0
   image:
     repository: lecex/user
-    tag: v1.2.7
+    tag: v1.3.2
     pullPolicy: IfNotPresent
   password: 
 
@@ -97,21 +97,21 @@ userApi:
   replicaCount: 0
   image:
     repository: lecex/user-api
-    tag: v1.2.7
+    tag: v1.3.2
     pullPolicy: IfNotPresent
 
 pay:
   replicaCount: 0
   image:
     repository: lecex/pay
-    tag: v1.2.10
+    tag: v1.3.2
     pullPolicy: IfNotPresent
 
 payApi:
   replicaCount: 0
   image:
     repository: lecex/pay-api
-    tag: v1.2.10
+    tag: v1.3.2
     pullPolicy: IfNotPresent
 
 redis:

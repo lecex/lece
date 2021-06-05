@@ -55,7 +55,7 @@ spec:
           env:
             - name: MICRO_REGISTRY
               value: "static"
-            - name: MICRO_REGISTRY_ADDRESS
+            - name: MICRO_SELECTOR
               value: "static"
             - name: MICRO_API_NAMESPACE
               value: "go.micro.api."

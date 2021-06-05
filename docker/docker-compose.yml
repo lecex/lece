@@ -41,6 +41,12 @@ services:
     environment:
       MICRO_SERVER_NAME: micro-rpc
       MICRO_ENABLE_STATS: "true"
+  ### websocket  ################################################
+  websocket:
+    image: ${WEBSOCKET_IMAGE}
+    command:
+      - "websocket"
+    environment:
   ### UI ################################################
   UI:
     image: ${UI_IMAGE}
@@ -134,6 +140,24 @@ services:
     image: ${SQL2000_API_IMAGE}
     command:
       - "sql2000Api"
+    environment:
+      REDIS_HOST: ${DOCKER_HOST_IP}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+  ### device  ################################################
+  device:
+    image: ${DEVICE_IMAGE}
+    command:
+      - "device"
+    environment:
+      DB_HOST: ${DOCKER_HOST_IP}
+      DB_USER: ${DEVICE_DB_USER}
+      DB_NAME: ${DEVICE_DB_NAME}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  ### device-API ################################################
+  device-api:
+    image: ${DEVICE_API_IMAGE}
+    command:
+      - "deviceApi"
     environment:
       REDIS_HOST: ${DOCKER_HOST_IP}
       REDIS_PASSWORD: ${REDIS_PASSWORD}

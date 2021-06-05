@@ -10,3 +10,15 @@ dependencies:
   version: 2.x.x
   repository: http://mirror.azure.cn/kubernetes/charts/
   alias: mysqldump
+
+# nfs-server-provisioner
+
+#   persistence.enabled
+#   true
+#   persistence.size
+#   1000Gi
+#   persistence.storageClass
+#   -
+#   storageClass.defaultClass
+#   true
+#   nodeSelector.kubernetes.io/hostname

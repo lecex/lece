@@ -32,6 +32,9 @@ spec:
       labels:
         app: user
     spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
       containers:
         - name: user
           image: "{{ .Values.user.image.repository }}:{{ .Values.user.image.tag }}"
@@ -65,9 +68,7 @@ spec:
                   key: mariadb-root-password
                   name: {{ include "lecex.fullname" . }}-mariadb
             - name: MICRO_REGISTRY
-              value: "static"
-            - name: MICRO_SELECTOR
-              value: "static"
+              value: "k8s"
           ports:
           - containerPort: 8080
             name: http

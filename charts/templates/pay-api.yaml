@@ -32,6 +32,9 @@ spec:
       labels:
         app: pay-api
     spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
       containers:
         - name: pay-api
           image: "{{ .Values.payApi.image.repository }}:{{ .Values.payApi.image.tag }}"
@@ -42,9 +45,7 @@ spec:
           ]
           env:
             - name: MICRO_REGISTRY
-              value: "static"
-            - name: MICRO_SELECTOR
-              value: "static"
+              value: "k8s"
             - name: USER_SERVICE
               value: "user"
             - name: PAY_SERVICE
