@@ -1,0 +1,83 @@
+# 负载均衡
+# 负载均衡
+{{ if .Values.websocket.ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: websocket
+spec:
+  rules:
+  - host: {{ .Values.websocket.ingress.host }}
+    http:
+      paths:
+        - backend:
+            serviceName: websocket
+            servicePort: http
+{{ end }}    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket
+  namespace: lecex
+spec:
+  selector:
+    app: websocket
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket
+  namespace: lecex
+  labels:
+    app: websocket
+spec:
+  {{ if .Values.socialite.replicaCount }}
+  replicas: {{ .Values.socialite.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: websocket
+  template:
+    metadata:
+      labels:
+        app: websocket
+    spec:
+      containers:
+        - name: websocket
+          image: lecex/websocket
+          imagePullPolicy: Always
+          command: [
+            "websocket",
+          ]
+          env:
+            - name: MICRO_REGISTRY
+              value: "k8s"
+            - name: SERVER_ADDRESS
+              value: ":8080"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=websocket",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

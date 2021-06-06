@@ -1,35 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pay-api
+  name: sql2000-api
   labels:
-    app: pay-api
+    app: sql2000-api
 spec:
-  {{ if .Values.payApi.replicaCount }}
-  replicas: {{ .Values.payApi.replicaCount }}
+  {{ if .Values.sql2000Api.replicaCount }}
+  replicas: {{ .Values.sql2000Api.replicaCount }}
   {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
     matchLabels:
-      app: pay-api
+      app: sql2000-api
   template:
     metadata:
       labels:
-        app: pay-api
+        app: sql2000-api
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: pay-api
-          image: "{{ .Values.payApi.image.repository }}:{{ .Values.payApi.image.tag }}"
-          imagePullPolicy: {{ .Values.payApi.image.pullPolicy }}
+        - name: sql2000-api
+          image: "{{ .Values.sql2000Api.image.repository }}:{{ .Values.sql2000Api.image.tag }}"
+          imagePullPolicy: {{ .Values.sql2000Api.image.pullPolicy }}
           command: [
-            "payApi",
+            "sql2000Api",
             "--server_address=:8080",
           ]
           env:
+            - name: REDIS_HOST
+              value: "{{ include "lecex.fullname" . }}-redis-master"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: {{ include "lecex.fullname" . }}-redis
             - name: MICRO_REGISTRY
               value: "k8s"
           ports:
@@ -41,7 +48,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=pay-api",
+            "--server_name=sql2000-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

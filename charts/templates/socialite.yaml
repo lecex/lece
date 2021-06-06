@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socialite
+  labels:
+    app: socialite
+spec:
+  {{ if .Values.socialite.replicaCount }}
+  replicas: {{ .Values.socialite.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: socialite
+  template:
+    metadata:
+      labels:
+        app: socialite
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: socialite
+          image: "{{ .Values.socialite.image.repository }}:{{ .Values.socialite.image.tag }}"
+          imagePullPolicy: {{ .Values.socialite.image.pullPolicy }}
+          command: [
+            "socialite",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: lecex
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: app-key
+                  name: lecex
+            - name: DB_HOST
+              value: "{{ include "lecex.fullname" . }}-mariadb"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "socialite"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: {{ include "lecex.fullname" . }}-mariadb
+            - name: MICRO_REGISTRY
+              value: "k8s"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=socialite",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

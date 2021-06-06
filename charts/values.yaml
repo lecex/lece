@@ -84,6 +84,16 @@ ui:
     enabled: true
     host: xip.io
   baseUrl: '/rpc'
+websocket:
+  replicaCount: 0
+  image:
+    repository: lecex/websocket
+    tag: latest
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: xip.io
+  baseUrl: '/ws'
 
 user:
   replicaCount: 0
@@ -111,6 +121,62 @@ payApi:
   replicaCount: 0
   image:
     repository: lecex/pay-api
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+socialite:
+  replicaCount: 0
+  image:
+    repository: lecex/socialite
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+socialiteApi:
+  replicaCount: 0
+  image:
+    repository: lecex/socialite-api
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+message:
+  replicaCount: 0
+  image:
+    repository: lecex/message
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+messageApi:
+  replicaCount: 0
+  image:
+    repository: lecex/message-api
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+device:
+  replicaCount: 0
+  image:
+    repository: lecex/device
+    tag: latest
+    pullPolicy: IfNotPresent
+
+deviceApi:
+  replicaCount: 0
+  image:
+    repository: lecex/device-api
+    tag: latest
+    pullPolicy: IfNotPresent
+
+sql2000:
+  replicaCount: 0
+  image:
+    repository: lecex/sql2000
+    tag: v1.3.2
+    pullPolicy: IfNotPresent
+
+sql2000Api:
+  replicaCount: 0
+  image:
+    repository: lecex/sql2000-api
     tag: v1.3.2
     pullPolicy: IfNotPresent
 

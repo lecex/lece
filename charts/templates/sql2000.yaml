@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql2000
+  labels:
+    app: sql2000
+spec:
+  {{ if .Values.sql2000.replicaCount }}
+  replicas: {{ .Values.sql2000.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: sql2000
+  template:
+    metadata:
+      labels:
+        app: sql2000
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: sql2000
+          image: "{{ .Values.sql2000.image.repository }}:{{ .Values.sql2000.image.tag }}"
+          imagePullPolicy: {{ .Values.sql2000.image.pullPolicy }}
+          command: [
+            "sql2000",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: lecex
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: app-key
+                  name: lecex
+            - name: DB_HOST
+              value: "172.16.1.1"
+            - name: DB_PORT
+              value: "21433"
+            - name: DB_USER
+              value: "sa"
+            - name: DB_NAME
+              value: "stmis1"
+            - name: DB_PASSWORD
+              value: "abc.123."
+            - name: DB_HOST_1
+              value: "172.16.1.1"
+            - name: DB_PORT_1
+              value: "31433"
+            - name: DB_USER_1
+              value: "sa"
+            - name: DB_NAME_1
+              value: "liu"
+            - name: DB_PASSWORD_1
+              value: "abc.123."
+            - name: MICRO_REGISTRY
+              value: "k8s"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=sql2000",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

@@ -1,35 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pay-api
+  name: socialite-api
   labels:
-    app: pay-api
+    app: socialite-api
 spec:
-  {{ if .Values.payApi.replicaCount }}
-  replicas: {{ .Values.payApi.replicaCount }}
+  {{ if .Values.socialiteApi.replicaCount }}
+  replicas: {{ .Values.socialiteApi.replicaCount }}
   {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
     matchLabels:
-      app: pay-api
+      app: socialite-api
   template:
     metadata:
       labels:
-        app: pay-api
+        app: socialite-api
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: pay-api
-          image: "{{ .Values.payApi.image.repository }}:{{ .Values.payApi.image.tag }}"
-          imagePullPolicy: {{ .Values.payApi.image.pullPolicy }}
+        - name: socialite-api
+          image: "{{ .Values.socialiteApi.image.repository }}:{{ .Values.socialiteApi.image.tag }}"
+          imagePullPolicy: {{ .Values.socialiteApi.image.pullPolicy }}
           command: [
-            "payApi",
+            "socialiteApi",
             "--server_address=:8080",
           ]
           env:
+            - name: REDIS_HOST
+              value: "{{ include "lecex.fullname" . }}-redis-master"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: {{ include "lecex.fullname" . }}-redis
             - name: MICRO_REGISTRY
               value: "k8s"
           ports:
@@ -41,7 +48,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=pay-api",
+            "--server_name=socialite-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

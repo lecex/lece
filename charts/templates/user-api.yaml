@@ -39,8 +39,6 @@ spec:
                   name: {{ include "lecex.fullname" . }}-redis
             - name: MICRO_REGISTRY
               value: "k8s"
-            - name: USER_SERVICE
-              value: "user"
           ports:
           - containerPort: 8080
             name: http
