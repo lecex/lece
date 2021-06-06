@@ -78,7 +78,7 @@ ui:
   replicaCount: 0
   image:
     repository: lecex/electron
-    tag: v1.3.2
+    tag: v1.2.15
     pullPolicy: IfNotPresent
   ingress:
     enabled: true

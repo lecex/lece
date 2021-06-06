@@ -13,3 +13,6 @@ run:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env  up -d
 dev:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env  up --build
+.PHONY: helm
+helm:
+	helm push charts/ $(NAMESPACE)
