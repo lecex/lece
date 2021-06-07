@@ -47,6 +47,9 @@ spec:
       labels:
         app: websocket
     spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
       containers:
         - name: websocket
           image: "{{ .Values.websocket.image.repository }}:{{ .Values.websocket.image.tag }}"
