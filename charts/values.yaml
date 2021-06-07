@@ -88,7 +88,7 @@ websocket:
   replicaCount: 0
   image:
     repository: lecex/websocket
-    tag: latest
+    tag: v1.3.3
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
