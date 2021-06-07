@@ -99,7 +99,7 @@ user:
   replicaCount: 0
   image:
     repository: lecex/user
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
   password: 
 
@@ -107,49 +107,49 @@ userApi:
   replicaCount: 0
   image:
     repository: lecex/user-api
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 pay:
   replicaCount: 0
   image:
     repository: lecex/pay
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 payApi:
   replicaCount: 0
   image:
     repository: lecex/pay-api
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 socialite:
   replicaCount: 0
   image:
     repository: lecex/socialite
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 socialiteApi:
   replicaCount: 0
   image:
     repository: lecex/socialite-api
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 message:
   replicaCount: 0
   image:
     repository: lecex/message
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 messageApi:
   replicaCount: 0
   image:
     repository: lecex/message-api
-    tag: v1.3.2
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 device:
@@ -169,15 +169,15 @@ deviceApi:
 sql2000:
   replicaCount: 0
   image:
-    repository: lecex/sql2000
-    tag: v1.3.2
+    repository: xinshiji/sql2000
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 sql2000Api:
   replicaCount: 0
   image:
-    repository: lecex/sql2000-api
-    tag: v1.3.2
+    repository: xinshiji/sql2000-api
+    tag: v1.3.3
     pullPolicy: IfNotPresent
 
 redis:
