@@ -62,6 +62,8 @@ spec:
               value: "k8s"
             - name: SERVER_ADDRESS
               value: ":8080"
+            - name: SERVER_SRV_ADDRESS
+              value: ":8989"
           ports:
           - containerPort: 8080
             name: http
@@ -72,7 +74,7 @@ spec:
             "/health",
             "--health_address=0.0.0.0:8081",
             "--server_name=websocket",
-            "--server_address=0.0.0.0:8080"
+            "--server_address=0.0.0.0:8989"
           ]
           livenessProbe:
             httpGet:
