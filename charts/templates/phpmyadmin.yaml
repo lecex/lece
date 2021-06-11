@@ -23,7 +23,11 @@ spec:
             - name: PMA_HOST
               value: {{ include "lecex.fullname" . }}-mariadb
             - name: UPLOAD_LIMIT
-              value: 500M
+              value: 8G
+            - name: MEMORY_LIMIT
+              value: 8G
+            - name: MAX_EXECUTION_TIME
+              value: 6000
           ports:
           - containerPort: 80
             hostPort: 35217

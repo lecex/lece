@@ -71,7 +71,7 @@ micro:
   replicaCount: 0
   image:
     repository: lecex/micro
-    tag: v2.4.6
+    tag: v2.4.7
     pullPolicy: IfNotPresent
 
 ui:
@@ -99,7 +99,7 @@ user:
   replicaCount: 0
   image:
     repository: lecex/user
-    tag: v1.3.3
+    tag: v1.3.4
     pullPolicy: IfNotPresent
   password: 
 
@@ -128,7 +128,7 @@ socialite:
   replicaCount: 0
   image:
     repository: lecex/socialite
-    tag: v1.3.3
+    tag: v1.3.4
     pullPolicy: IfNotPresent
 
 socialiteApi:

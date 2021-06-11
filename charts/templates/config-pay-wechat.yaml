@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: lecex-pay-wechat
+data:
+  ApiKey: ""
+  AppId: ""
+  MchId: ""
+  PemCert: ""
+  PemKey: ""
