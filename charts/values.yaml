@@ -166,6 +166,21 @@ deviceApi:
     tag: latest
     pullPolicy: IfNotPresent
 
+organizes:
+  replicaCount: 0
+  image:
+    repository: lecex/organizes
+    tag: latest
+    pullPolicy: IfNotPresent
+
+organizesApi:
+  replicaCount: 0
+  image:
+    repository: lecex/organizes-api
+    tag: latest
+    pullPolicy: IfNotPresent
+
+
 sql2000:
   replicaCount: 0
   image:

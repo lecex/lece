@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: organize
+  labels:
+    app: organize
+spec:
+  {{ if .Values.organize.replicaCount }}
+  replicas: {{ .Values.organize.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: organize
+  template:
+    metadata:
+      labels:
+        app: organize
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: organize
+          image: "{{ .Values.organize.image.repository }}:{{ .Values.organize.image.tag }}"
+          imagePullPolicy: {{ .Values.organize.image.pullPolicy }}
+          command: [
+            "organize",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: DB_HOST
+              value: "{{ include "lecex.fullname" . }}-mariadb"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "organize"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: {{ include "lecex.fullname" . }}-mariadb
+            - name: MICRO_REGISTRY
+              value: "k8s"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=organize",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
