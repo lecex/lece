@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: organize
+  name: institution
   labels:
-    app: organize
+    app: institution
 spec:
-  {{ if .Values.organize.replicaCount }}
-  replicas: {{ .Values.organize.replicaCount }}
+  {{ if .Values.institution.replicaCount }}
+  replicas: {{ .Values.institution.replicaCount }}
   {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
     matchLabels:
-      app: organize
+      app: institution
   template:
     metadata:
       labels:
-        app: organize
+        app: institution
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: organize
-          image: "{{ .Values.organize.image.repository }}:{{ .Values.organize.image.tag }}"
-          imagePullPolicy: {{ .Values.organize.image.pullPolicy }}
+        - name: institution
+          image: "{{ .Values.institution.image.repository }}:{{ .Values.institution.image.tag }}"
+          imagePullPolicy: {{ .Values.institution.image.pullPolicy }}
           command: [
-            "organize",
+            "institution",
             "--server_address=:8080",
           ]
           env:
@@ -35,7 +35,7 @@ spec:
             - name: DB_USER
               value: "root"
             - name: DB_NAME
-              value: "organize"
+              value: "institution"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -52,7 +52,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=organize",
+            "--server_name=institution",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:

@@ -78,7 +78,17 @@ ui:
   replicaCount: 0
   image:
     repository: lecex/electron
-    tag: v1.2.15
+    tag: latest
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: xip.io
+  baseUrl: '/rpc'
+app:
+  replicaCount: 0
+  image:
+    repository: lecex/app
+    tag: latest
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
@@ -88,7 +98,7 @@ websocket:
   replicaCount: 0
   image:
     repository: lecex/websocket
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
@@ -99,7 +109,7 @@ user:
   replicaCount: 0
   image:
     repository: lecex/user
-    tag: v1.3.4
+    tag: latest
     pullPolicy: IfNotPresent
   password: 
 
@@ -107,14 +117,14 @@ userApi:
   replicaCount: 0
   image:
     repository: lecex/user-api
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 pay:
   replicaCount: 0
   image:
     repository: lecex/pay
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 payApi:
@@ -128,28 +138,28 @@ socialite:
   replicaCount: 0
   image:
     repository: lecex/socialite
-    tag: v1.3.4
+    tag: latest
     pullPolicy: IfNotPresent
 
 socialiteApi:
   replicaCount: 0
   image:
     repository: lecex/socialite-api
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 message:
   replicaCount: 0
   image:
     repository: lecex/message
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 messageApi:
   replicaCount: 0
   image:
     repository: lecex/message-api
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 device:
@@ -166,17 +176,17 @@ deviceApi:
     tag: latest
     pullPolicy: IfNotPresent
 
-organizes:
+institution:
   replicaCount: 0
   image:
-    repository: lecex/organizes
+    repository: lecex/institution
     tag: latest
     pullPolicy: IfNotPresent
 
-organizesApi:
+institutionApi:
   replicaCount: 0
   image:
-    repository: lecex/organizes-api
+    repository: lecex/institution-api
     tag: latest
     pullPolicy: IfNotPresent
 
@@ -185,14 +195,14 @@ sql2000:
   replicaCount: 0
   image:
     repository: xinshiji/sql2000
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 sql2000Api:
   replicaCount: 0
   image:
     repository: xinshiji/sql2000-api
-    tag: v1.3.3
+    tag: latest
     pullPolicy: IfNotPresent
 
 redis:

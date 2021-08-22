@@ -30,16 +30,6 @@ spec:
             "--server_address=:8080",
           ]
           env:
-            - name: ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: admin-password
-                  name: lecex
-            - name: APP_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: app-key
-                  name: lecex
             - name: DB_HOST
               value: "{{ include "lecex.fullname" . }}-mariadb"
             - name: DB_USER

@@ -1,42 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: organize-api
+  name: institution-api
   labels:
-    app: organize-api
+    app: institution-api
 spec:
-  {{ if .Values.organizeApi.replicaCount }}
-  replicas: {{ .Values.organizeApi.replicaCount }}
+  {{ if .Values.institutionApi.replicaCount }}
+  replicas: {{ .Values.institutionApi.replicaCount }}
   {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
     matchLabels:
-      app: organize-api
+      app: institution-api
   template:
     metadata:
       labels:
-        app: organize-api
+        app: institution-api
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: organize-api
-          image: "{{ .Values.organizeApi.image.repository }}:{{ .Values.organizeApi.image.tag }}"
-          imagePullPolicy: {{ .Values.organizeApi.image.pullPolicy }}
+        - name: institution-api
+          image: "{{ .Values.institutionApi.image.repository }}:{{ .Values.institutionApi.image.tag }}"
+          imagePullPolicy: {{ .Values.institutionApi.image.pullPolicy }}
           command: [
-            "organizeApi",
+            "institutionApi",
             "--server_address=:8080",
           ]
           env:
-            - name: REDIS_HOST
-              value: "{{ include "lecex.fullname" . }}-redis-master"
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: redis-password
-                  name: {{ include "lecex.fullname" . }}-redis
             - name: MICRO_REGISTRY
               value: "k8s"
           ports:
@@ -48,7 +41,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=organize-api",
+            "--server_name=institution-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:
