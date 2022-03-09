@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apply-api
+  name: storage-api
   labels:
-    app: apply-api
+    app: storage-api
 spec:
-  {{ if .Values.applyApi.replicaCount }}
-  replicas: {{ .Values.applyApi.replicaCount }}
+  {{ if .Values.storageApi.replicaCount }}
+  replicas: {{ .Values.storageApi.replicaCount }}
   {{ else }}
   replicas: {{ .Values.replicaCount }}
   {{ end }}
   selector:
     matchLabels:
-      app: apply-api
+      app: storage-api
   template:
     metadata:
       labels:
-        app: apply-api
+        app: storage-api
     spec:
       serviceAccountName: micro-services
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-        - name: apply-api
-          image: "{{ .Values.applyApi.image.repository }}:{{ .Values.applyApi.image.tag }}"
-          imagePullPolicy: {{ .Values.applyApi.image.pullPolicy }}
+        - name: storage-api
+          image: "{{ .Values.storageApi.image.repository }}:{{ .Values.storageApi.image.tag }}"
+          imagePullPolicy: {{ .Values.storageApi.image.pullPolicy }}
           command: [
-            "applyApi",
+            "storageApi",
             "--server_address=:8080",
           ]
           env:
@@ -48,7 +48,7 @@ spec:
           command: [
             "/health",
             "--health_address=0.0.0.0:8081",
-            "--server_name=apply-api",
+            "--server_name=storage-api",
             "--server_address=0.0.0.0:8080"
           ]
           livenessProbe:
