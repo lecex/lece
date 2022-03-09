@@ -161,6 +161,20 @@ messageApi:
     repository: lecex/message-api
     tag: latest
     pullPolicy: IfNotPresent
+  
+apply:
+  replicaCount: 0
+  image:
+    repository: lecex/apply
+    tag: latest
+    pullPolicy: IfNotPresent
+
+applyApi:
+  replicaCount: 0
+  image:
+    repository: lecex/apply-api
+    tag: latest
+    pullPolicy: IfNotPresent
 
 device:
   replicaCount: 0

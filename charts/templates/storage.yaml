@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apply
+  labels:
+    app: apply
+spec:
+  {{ if .Values.apply.replicaCount }}
+  replicas: {{ .Values.apply.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: apply
+  template:
+    metadata:
+      labels:
+        app: apply
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: apply
+          image: "{{ .Values.apply.image.repository }}:{{ .Values.apply.image.tag }}"
+          imagePullPolicy: {{ .Values.apply.image.pullPolicy }}
+          command: [
+            "apply",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: DB_HOST
+              value: "{{ include "lecex.fullname" . }}-mariadb"
+            - name: DB_USER
+              value: "root"
+            - name: DB_NAME
+              value: "apply"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-root-password
+                  name: {{ include "lecex.fullname" . }}-mariadb
+            - name: MICRO_REGISTRY
+              value: "k8s"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=apply",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

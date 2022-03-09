@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apply-api
+  labels:
+    app: apply-api
+spec:
+  {{ if .Values.applyApi.replicaCount }}
+  replicas: {{ .Values.applyApi.replicaCount }}
+  {{ else }}
+  replicas: {{ .Values.replicaCount }}
+  {{ end }}
+  selector:
+    matchLabels:
+      app: apply-api
+  template:
+    metadata:
+      labels:
+        app: apply-api
+    spec:
+      serviceAccountName: micro-services
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: apply-api
+          image: "{{ .Values.applyApi.image.repository }}:{{ .Values.applyApi.image.tag }}"
+          imagePullPolicy: {{ .Values.applyApi.image.pullPolicy }}
+          command: [
+            "applyApi",
+            "--server_address=:8080",
+          ]
+          env:
+            - name: REDIS_HOST
+              value: "{{ include "lecex.fullname" . }}-redis-master"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: {{ include "lecex.fullname" . }}-redis
+            - name: MICRO_REGISTRY
+              value: "k8s"
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=apply-api",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
